@@ -133,6 +133,9 @@ Dのクロックに合わせてMでデータが出てるように見える。
 decoder.pyは002_change.csvを読み込んで信号に合わせてLEDの点灯っぽいhtmlファイルを出力するプログラム。
 部分部分だけ説明すると
 
+↓32bitカウンタの値の最上位が1から0になるときにhtmlファイルを初期化している。
+32bitカウンタが1回転する毎にファイルを生成している。
+
 ```
     if current_values[4] == 0 and pre_values[4] == 1:
         output = StringIO()
@@ -152,16 +155,18 @@ decoder.pyは002_change.csvを読み込んで信号に合わせてLEDの点灯�
         counter = 0
         counter_clock = 0
 ```
-32bitカウンタの値の最上位が1から0になるときにhtmlファイルを初期化している。
-32bitカウンタが1回転する毎にファイルを生成している。
 
+↓Bが0から1になるときに128個のLED用のカウンターをゼロにクリアしている。
 ```
     if current_values[1] == 1 and pre_values[1] == 0:
         counter_clock = 0
         counter = counter + 1
 ```
-Bが0から1になるときに128個のLED用のカウンターをゼロにクリアしている。
 
+
+
+↓Dのクロックのライジングエッジに合わせてNとOのorを取っている。
+NとOが一致してなかったのでどちらかONならONにしてみた。
 
 ```
     if current_values[3] == 1 and pre_values[3] == 0:
@@ -170,8 +175,6 @@ Bが0から1になるときに128個のLED用のカウンターをゼロにク�
         counter_clock = counter_clock + 1
 ```
 
-Dのクロックのライジングエッジに合わせてNとOのorを取っている。
-NとOが一致してなかったのでどちらかONならONにしてみた。
 
 decoder.pyを実行すると0001.html～0009.htmlができる。
 そのうちの一つが↓の画像。
