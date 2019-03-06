@@ -130,3 +130,52 @@ Dのクロックに合わせてMでデータが出てるように見える。
 ## デコーダプログラムを書いてみる
 
 
+decoder.pyは002_change.csvを読み込んで信号に合わせてLEDの点灯っぽいhtmlファイルを出力するプログラム。
+部分部分だけ説明すると
+
+```
+    if current_values[4] == 0 and pre_values[4] == 1:
+        output = StringIO()
+        numpy.savetxt(output, bitmap, delimiter="", fmt="%d")
+        print(output.getvalue())
+        sys.stdout.flush()
+        print("renew")
+        s = get_html(bitmap)
+        wfp.write(s)
+        wfp.close()
+        file_index = file_index + 1
+        wfp = open("%04d.html" % file_index, "w")
+        
+        bitmap = []
+        for i in range(32):
+            bitmap.append([0] * 128)
+        counter = 0
+        counter_clock = 0
+```
+32bitカウンタの値の最上位が1から0になるときにhtmlファイルを初期化している。
+32bitカウンタが1回転する毎にファイルを生成している。
+
+```
+    if current_values[1] == 1 and pre_values[1] == 0:
+        counter_clock = 0
+        counter = counter + 1
+```
+Bが0から1になるときに128個のLED用のカウンターをゼロにクリアしている。
+
+
+```
+    if current_values[3] == 1 and pre_values[3] == 0:
+        bitmap[counter][counter_clock] = (current_values[12] or current_values[13])
+    
+        counter_clock = counter_clock + 1
+```
+
+Dのクロックのライジングエッジに合わせてNとOのorを取っている。
+NとOが一致してなかったのでどちらかONならONにしてみた。
+
+decoder.pyを実行すると0001.html～0009.htmlができる。
+そのうちの一つが↓の画像。
+
+![Flag](./004_flag.jpg)
+
+
