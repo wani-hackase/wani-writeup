@@ -32,3 +32,7 @@
 README.md に writeup を書く
 
 同ディレクトリに問題に関連するコード・ファイルをアップロードする
+
+## 注意
+
+- 常設 CTF の writeup は FLAG を「XXXXXX」で隠す
