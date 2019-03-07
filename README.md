@@ -19,11 +19,12 @@
 
 - problemFormat は
 
-  - cry
-  - pwn
-  - web
-  - rev
-  - for
+  - cry (cryptography)
+  - pwn (pwnable)
+  - web (web)
+  - rev (reversing)
+  - for (forensics)
+  - stg (steganography)
   - その他適宜追加する (3 文字推奨 それ以上でも可)
 
 - problemName は判別できる範囲で簡略化
