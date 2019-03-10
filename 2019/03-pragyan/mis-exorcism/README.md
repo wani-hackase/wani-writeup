@@ -16,7 +16,7 @@ My friend Alex needs your help very fast. He has been possessed by a ghost and t
 
 ![b](b.png "b.png")
 
-確かにコードになっていることが分かる。
+確かにQRコードになっていることが分かる。
 これを画像に変換して読み取る。
 
 ![qr](qr.png "qr")
