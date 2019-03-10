@@ -23,7 +23,7 @@ However, now is an emergency time. Malfoy is causing trouble again, and Harry ne
 
 ## Solution
 
-10人がKeyを持っていて、5人集まれば情報が得られるという事から、シャミアの秘密分散法（Shamir's Secret Sharing）を使っているだろうと予想した。しばらくこれについて調べていると問題で与えられたのと同じ形式を使った [QR Secret Sharing](https://github.com/skewthreads/QR-secret-sharing) を見つけた。これを実行するだけで良さそう。
+10人がKeyを持っていて、5人集まれば情報が得られるという事から、シャミアの秘密分散法（Shamir's Secret Sharing）を使っているだろうと予想した。しばらくこれについて調べていると問題で与えられたのと同じ形式で秘密を分散させる [QR Secret Sharing](https://github.com/skewthreads/QR-secret-sharing) を見つけた。これの復号を実行するだけで良さそう。
 
 また、事前に pyzbar で QRコードをまとめて読み取っておいた。
 
