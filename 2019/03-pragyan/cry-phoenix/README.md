@@ -23,9 +23,24 @@ However, now is an emergency time. Malfoy is causing trouble again, and Harry ne
 
 ## Solution
 
-10人がKeyを持っていて、5人集まれば情報が得られるという事から、シャミアの秘密分散法（Shamir's Secret Sharing） を使っているだろうと予想した。しばらくこれについて調べていると問題で与えられたのと同じ形式を使った [QR Secret Sharing](https://github.com/skewthreads/QR-secret-sharing) を見つけた。
+10人がKeyを持っていて、5人集まれば情報が得られるという事から、シャミアの秘密分散法（Shamir's Secret Sharing）を使っているだろうと予想した。しばらくこれについて調べていると問題で与えられたのと同じ形式を使った [QR Secret Sharing](https://github.com/skewthreads/QR-secret-sharing) を見つけた。これを実行するだけで良さそう。
 
-これをcloneして実行し、10個のKeyから5個のKeyを入力すると Flag が得られた。
+また、事前に pyzbar で QRコードをまとめて読み取っておいた。
+
+```python
+from PIL import Image
+from pyzbar.pyzbar import decode
+
+namelist = ['Harry', 'Hermione', 'Ron', 'George', 'Charlie', 'Bill', 'Ginny', 'Fleur', 'Luna', 'Neville']
+
+for name in namelist:
+    qr = Image.open('{}.png'.format(name))
+    print(decode(qr)[0][0].decode())
+```
+
+
+
+10個のKeyから5個のKeyを入力すると Flag が得られた。
 
 ![flag](flag.png "flag")
 
