@@ -1,3 +1,8 @@
+/*
+ * this php code works on the server
+ * 35.246.234.136
+ */
+
 <?php
 if (isset($_GET["source"]))
     die(highlight_file(__FILE__));
