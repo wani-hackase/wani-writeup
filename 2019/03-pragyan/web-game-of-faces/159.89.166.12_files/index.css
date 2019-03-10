@@ -1,0 +1,11 @@
+.row{
+  height: 50vh;
+}
+
+.img{
+  width: inherit;
+}
+
+.form_img{
+  opacity: 0;
+}
