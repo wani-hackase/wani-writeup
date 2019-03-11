@@ -17,6 +17,8 @@ I check html code, but there are no hints.
 
 But, it seems that something is hidden in cookie.
 
+html コードに手がかりは無いですが、cookie を推しているので cookie 関連の問題と思われます。
+
 ## check cookie
 
 ![screen2](screen2.jpg "screen2")
@@ -26,6 +28,10 @@ I find cookie that name is "flag".
 When I reload browser, flag value is changed.
 
 But, flag value is looped like this.
+
+cookie を見てみると flag という名前の値が見つかります。
+
+これはブラウザを最読み込みすると値が変化しますが、調べてみるとループしていることが分かります。
 
 ```
 bc54f4d60f1cec0f9a6cb70e13f2127a
@@ -58,6 +64,8 @@ These are like hash value.
 
 I try to decode them by MD5.
 
+ハッシュ値のようなので MD5 で復号してみます
+
 ```
 bc54f4d60f1cec0f9a6cb70e13f2127a : pc
 114d6a415b3d04db792ca7c0da0c7a55 : tf
@@ -85,4 +93,4 @@ c1d12de20210d8c1b35c367536e1c255 : l0
 a8655da06c5080d3f1eb6af7b514e309 : t}
 ```
 
-Then, I get flag pctf{c0oki3s_@re_yUm_bUt_tHEy_@ls0_r3vEaL_@_l0t}
+Then, I get flag pctf{c0oki3s*@re_yUm_bUt_tHEy*@ls0*r3vEaL*@\_l0t}

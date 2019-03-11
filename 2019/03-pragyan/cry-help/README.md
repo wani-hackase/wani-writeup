@@ -12,15 +12,17 @@ and I get 3 files.
 
 ciphertext.txt - encrypted data
 
-publickey.pem  - a publickey encoded as PEM
+publickey.pem - a publickey encoded as PEM
 
-encrypt.py     - main encryption code
+encrypt.py - main encryption code
 
 ## read publickey.pem
 
 First, I check publickey.
 
 I can get e and n value.
+
+まずは publickey.pem から e と n を取り出します。
 
 ```python
 from Crypto.PublicKey import RSA
@@ -79,9 +81,17 @@ This means that p and q are similar values.
 
 It is easy to get p and q value from n.
 
+q は nextPrime 関数から生成されています。
+
+nextPrime 関数は p をインクリメントしていき p の次に大きい素数を計算します。
+
+そのため、p と q の値が近く、n のルート付近を総当たりで p・q を求めることができます。
+
 ## get value of p and q
 
 First, I calculate approximation value from n^(1/2).
+
+まず n のルートの近似値を求めます。
 
 ```python
 n = 68367741643352408657735068643514841659753216083862769094847066695306696933618090026602354837201210914348646470450259642887798188510482019698636160200778870456236361521880907328722252080005877088416283896813311117096542977573101128888124000494645965045855288082328139311932783360168599377647677632122110245577
@@ -102,6 +112,8 @@ while digit > -1:
 ```
 
 Then, I try brute force attack to get p.
+
+そして p を総当たりで求めます。
 
 ```python
 n= 68367741643352408657735068643514841659753216083862769094847066695306696933618090026602354837201210914348646470450259642887798188510482019698636160200778870456236361521880907328722252080005877088416283896813311117096542977573101128888124000494645965045855288082328139311932783360168599377647677632122110245577
@@ -136,6 +148,8 @@ I have secret key p and q.
 Let's decrypt using this formula.
 
 <https://en.wikipedia.org/wiki/Rabin_cryptosystem#Computing_square_roots>
+
+上記の wikipedia に掲載されている式から復号化します。
 
 ```python
 # this code is written by Laika
