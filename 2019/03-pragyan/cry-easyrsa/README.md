@@ -4,7 +4,7 @@
 
 Deeraj is experimenting with RSA. He is given the necessary RSA parameters. He realizes something is off, but doesn't know what. Can you help him figure it out?
 
-[parameters.txt](parameters.txt parameters.txt)
+[parameters.txt](parameters.txt)
 
 ## Solution
 
