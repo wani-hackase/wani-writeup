@@ -11,13 +11,13 @@ http://159.89.166.12:13500/
 
 ![screen1](screen1.jpg "screen1")
 
-## see websites
+## check websites
 
 I check html code, but there are no hints.
 
 But, it seems that something is hidden in cookie.
 
-html コードに手がかりは無いですが、cookie を推しているので cookie 関連の問題と思われます。
+> html コードに手がかりは無いですが、cookie を推しているので cookie 関連の問題と思われます。
 
 ## check cookie
 
@@ -29,9 +29,9 @@ When I reload browser, flag value is changed.
 
 But, flag value is looped like this.
 
-cookie を見てみると flag という名前の値が見つかります。
-
-これはブラウザを最読み込みすると値が変化しますが、調べてみるとループしていることが分かります。
+> cookie を見てみると flag という名前の値が見つかります。
+>
+> これはブラウザを最読み込みすると値が変化しますが、調べてみるとループしていることが分かります。
 
 ```
 bc54f4d60f1cec0f9a6cb70e13f2127a
@@ -64,7 +64,7 @@ These are like hash value.
 
 I try to decode them by MD5.
 
-ハッシュ値のようなので MD5 で復号してみます
+> ハッシュ値のようなので MD5 で復号してみます
 
 ```
 bc54f4d60f1cec0f9a6cb70e13f2127a : pc
