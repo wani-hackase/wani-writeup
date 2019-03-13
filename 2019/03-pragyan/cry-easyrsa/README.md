@@ -8,13 +8,25 @@ Deeraj is experimenting with RSA. He is given the necessary RSA parameters. He r
 
 ## Solution
 
-parameter.txt を見ると、RSA暗号に使われる e は一般的に 65537(= 2^16 + 1) であるのに対し、かなり大きな値になっている。この時、Wiener's Attack が有効であると考えられる。
+First, I noticed that the `e` parameter (public exponent) is very large. In this case, the secret key `d` can be calculated by using Wiener's attack.
+
+> parameter.txt を見ると、RSA暗号に使われる e は一般的に 65537(= 2^16 + 1) であるのに対し、かなり大きな値になっている。この時、Wiener's Attack が有効であると考えられる。
 Wiener's Attack は 秘密鍵 d が十分小さいときに、公開鍵から秘密鍵を復号できる。この場合は e が大きいために d が相対的に小さくなることを利用している。
 
-Wiener's Attack の [実装例](https://github.com/pablocelayes/rsa-wiener-attack) がGitHubにあるので、これを用いて秘密鍵 d を得る。
+
+I used an implementation of Wiener's attack on Github.  
+[rsa-wiener-attack](https://github.com/pablocelayes/rsa-wiener-attack)
+
+> Wiener's Attack の [実装例](https://github.com/pablocelayes/rsa-wiener-attack) がGitHubにあるので、これを用いて秘密鍵 d を得る。
+
 `d = 12978409760901509356642421072925801006324287746872153539187221529835976408177`
 
-平文 m は m ≡ c^d mod n で表されるので、m を計算し文字列へと変換すると Flag が獲得できる。
+Let `m` be the plaintext, m ≡ c^d mod n.
+`m` is the flag, but we have to convert m(decimal) into a string.
+
+(m(Dec) -> m(Hex) -> m(String))
+
+> 平文 m は m ≡ c^d mod n で表されるので、m を計算し文字列へと変換すると Flag が獲得できる。
 
 ```python
 e = 217356749319385698521929657544628507680950813122965981036139317973675569442588326220293299168756490163223201593446006249622787212268918299733683908813777695992195006830244088685311059537057855442978678020950265617092637544349098729925492477391076560770615398034890984685084288600014953201593750327846808762513
@@ -31,7 +43,6 @@ for a, b in zip(m[::2], m[1::2]):
 print(flg)
 
 ```
-
 
 
 Flag : `pctf{Sup3r_st4nd4rd_W31n3r_4tt4ck}`
