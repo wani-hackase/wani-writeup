@@ -9,7 +9,7 @@
 
 stringsで見てみるとstrcpyとかgetsとかあるしバッファオーバフロー系かなと思う。
 
-が、checksecｄ見るとフルでプロテクトかかってる。
+が、checkseで見るとフルでプロテクトかかってる。
 これは苦労しそうだなと。
 さらにfileコマンドで見てみると↓ARMかよ．．．ARMのgdb環境は整えてないので少し萎える。
 
@@ -31,7 +31,7 @@ saru@lucifen:~/wani-writeup/2019/03-volga/pwn-warm$
 なんだこれは簡単そうじゃないか．．．
 一文字目は0x76、後はXORをひたすらかけてる。
 
-```C
+```C:ghidra_001.c
 undefined4 FUN_00010788(byte *pbParm1)
 {
   size_t sVar1;
