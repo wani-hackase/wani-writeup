@@ -1,5 +1,11 @@
 # Wani Hackase writeup
 
+[Official Website](http://www-int.ist.osaka-u.ac.jp/ctf/)
+
+[CTFtime](https://ctftime.org/team/70717)
+
+CTF solutions from Osaka University CTF team Wani Hackase
+
 大阪大学 CTF チーム Wani Hackase の writeup 置き場です
 
 ## 使用方法

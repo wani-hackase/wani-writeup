@@ -12,6 +12,8 @@ Note: Enclose it in pctf{}
 
 There is "pctf" character in secret.txt.
 
+> 「pctf」が secret.txt の中のどこかにあるそうです。
+
 ```python
 import random
 
@@ -52,9 +54,15 @@ This crypto is called Affin cipher.
 
 But this code has some difference.
 
+> flag 文字列はアルファベットのみ取り出されています。
+>
+> これはアフィン暗号とも呼ばれますが少しカスタマイズされています。
+
 ## solve problem
 
 First, key can be thought as key%26.
+
+> まず key は定数であり、mod26 を取り、0 から 25 のどれかの値として考えることができます。
 
 ```python
 a = key[0][0]%26 # a is 0..25
@@ -68,6 +76,10 @@ Second, There is "pctf" character in secret.txt.
 I try all key, and encrypt "pctf", and make sure ciphertext matches.
 
 If it maches, I decode all ciphertext.
+
+> 次に secret.txt の中に「pctf」が含まれていることから、まず全ての key で pctf を暗号化し、ciphertext と一致するか調べます。
+>
+> そしてもし一致する部分がある場合、その key を使って ciphertext を復号化します。
 
 ```python
 cipher_txt = open("ciphertext.txt").read()
