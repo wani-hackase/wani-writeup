@@ -9,10 +9,17 @@
 これはいろいろ試したのだがShopを勘違いしていた僕にとって難しすぎた。
 
 Shopと同様にwarファイルはダウンロードできた。
-差分はShopContrller.javatとかごく一部。
+差分はShopContrller.javaとかごく一部。
 単純に買えなくなったというだけの変更に見える。
 
+
+
 ```bash-statement
+# cd shop-1.0.0
+# find . -printf "%p %s\n" > ../shop-1.0.0_list.txt
+# cd ../shop-1.0.1
+# find . -printf "%p %s\n" > ../shop-1.0.1_list.txt
+# diff ../shop-1.0.0_list.txt ../shop-1.0.1_list.txt
 69c69
 < ./WEB-INF/classes/application.properties 165
 ---
