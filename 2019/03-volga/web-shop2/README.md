@@ -35,6 +35,17 @@ Shopと同様にwarファイルはダウンロードできた。
 ```
 
 ```WEB-INF/classes/application.properties``` を見るとデータベース関連のやつが追加されているので外部から接続できたりするのか？と思いJDBCやらでいろいろ接続しようとしたけどそもそもポートが空いてない。
+接続試してみたのは
+- 1433
+- 3306
+- 5432
+- 5433
+- 5434
+- 5435
+- 8082
+- 9082
+- 9092
+のあたり。
 
 ```
 spring.mvc.view.prefix=/WEB-INF/templates/
@@ -87,13 +98,14 @@ ShopController.javaはbuyができなくなるという修正が加えられて�
 
 
 結局他の人のwriteupを見ないと分からなかった。
-ポイントは以下のの2点。
+ポイントは以下の2点。
 - POSTで変数を書き換える
 - CartItemsの配列を追加する
 
 writeupを参考にPythonのrequestsを使って書いていたのだけど、どうもうまく動かず。
 結局Cookieを使ってセッション管理するときはrequests.Sessionを使った方が良いということが分かった。
 配列をPOSTするときに「```CartItems[0]```」とかするのもポイントかな。
+結局のところControllerの中で```getXXXX```で値が取れる場合、```XXXX```はGETパラメータやPOSTパラメータで書き換えることができるようだ。
 
 ```python
 import requests
