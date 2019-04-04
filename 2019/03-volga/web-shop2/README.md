@@ -86,6 +86,7 @@ ShopController.javaはbuyができなくなるという修正が加えられて�
 
 writeupを参考にPythonのrequestsを使って書いていたのだけど、どうもうまく動かず。
 結局Cookieを使ってセッション管理するときはrequests.Sessionを使った方が良いということが分かった。
+配列をPOSTするときに「```CartItems[0]```」とかするのもポイントかな。
 
 ```python
 import requests
