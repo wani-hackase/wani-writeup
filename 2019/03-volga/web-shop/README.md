@@ -1,8 +1,10 @@
-# 問題
+# VolgaCTF 2019 "Shop" writeup
+
+## 問題
 
 ![問題](./001.png)
 
-# 解法
+## 解法
 
 時間内に解けたことは解けたのだけどadmin:adminで入った場合にBalanceがめちゃめちゃ増えてて(たぶん他の人が解いた)あっさり解けてしまった。
 チーム内でこれ違うよね、との議論になって終わった後にwriteupみてたらやっぱり違った。
@@ -314,6 +316,6 @@ public class ShopController
 ```
 
 
-# 参考
+## 参考
 
 - [VolgaCTF - Shop [ WEB ] [DeadLock Team ] [ 2019 ] [ Writeup ] - YouTube](https://www.youtube.com/watch?v=Xx8JoCOnUM0)
