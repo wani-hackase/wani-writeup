@@ -181,9 +181,9 @@ shop-1.0.0.warはサーブレットのメイン。
 ./WEB-INF/templates/registration.jsp
 ./WEB-INF/templates/shop.jsp
 ```
-JDCだとなぜかShopController.javaがデコンパイルできないファイルがあったのでLuytenを使った。
+JDCだとなぜかShopController.javaがデコンパイルできないのでLuytenを使った。
 単純なJSP。
-JSPだとGETとPOSTが同じように扱われるのを知っていたので
+JSPだとGETとPOSTが同じように扱われる場合もあるのを知っていたので
 http://shop.q.2019.volgactf.ru/buy?productId=1
 にアクセスして購入できたりするのは確認。
 ここでどん詰まった後にadminで入れて解けたのだが、正解は違うっぽい。
@@ -191,7 +191,7 @@ http://shop.q.2019.volgactf.ru/buy?productId=1
 http://shop.q.2019.volgactf.ru/buy?productId=4&Balance=10000
 でBalanceを書き換えて購入するとのことだった。
 
-ただ、デコンパイルしたファイルを見てもBalanceは書き換えられないように見える。framework使うと勝手にBalanceも外からいじれるようになるとかだろうか。後で自分の手元で試してみたい．．．
+ただ、デコンパイルしたファイルを見てもBalanceは書き換えられないように見える。framework使うと勝手にBalanceも外からいじれるようになるとかだろうか？それともダウンロードできたshop-1.0.0.warと実際に上がっているファイルが異なるのだろうか？直感的には後者な気がする。前者だとあまりにも危険。後で自分の手元で試してみたい。
 
 
 
