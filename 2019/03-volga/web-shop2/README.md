@@ -63,37 +63,21 @@ ShopController.javaはbuyができなくなるという修正が加えられて�
 
 ```text
 99,112c99
-
 <         final Product product = this.productDao.geProduct(productId);
-
 <         if (product != null) {
-
 <             if (product.getPrice() <= user.getBalance()) {
-
 <                 user.setBalance(Integer.valueOf(user.getBalance() - product.getPrice()));
-
 <                 user.getCartItems().add(product);
-
 <                 this.userDao.update(user);
-
 <                 redir.addFlashAttribute("message", (Object)"Successful purchase");
-
 <                 return "redirect:profile";
-
 <             }
-
 <             redir.addFlashAttribute("message", (Object)"Not enough money");
-
 <         }
-
 <         else {
-
 <             redir.addFlashAttribute("message", (Object)"Product not found");
-
 <         }
-
 ---
-
 >         redir.addFlashAttribute("message", (Object)"Too easy");
 ```
 
