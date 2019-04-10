@@ -206,8 +206,8 @@ $ python make_string002.py > exploit002.txt
 ```
 
 ```bash-statement
-gef➤ run < wu_exploit002.txt
-Starting program: /home/saru/wani-writeup/2019/04-tjctf/bin-silly-sledshop/sledshop < wu_exploit002.txt
+gef➤ run < exploit002.txt
+Starting program: /home/saru/wani-writeup/2019/04-tjctf/bin-silly-sledshop/sledshop < exploit002.txt
 The following products are available:
 |  Saucer  | $1 |
 | Kicksled | $2 |
