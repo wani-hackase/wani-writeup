@@ -12,7 +12,7 @@ Note: m and k were 24 and 8 characters long originally and english characters.
 
 ## Solution
 
-comprehensive.py
+comprehensive.pyを見る。
 
 ```python
 
@@ -27,7 +27,8 @@ print(str([a + ord(k[0]) for b in i for a in b])[1:-1] + ',', sum([ord(a) for a 
 
 ```
 
-f, g, h, i is equal to this
+f, g, h, iがワンライナーで、len(hoge)が複雑なので書き換えてみる。
+
 ```python
 
 f = []
@@ -60,18 +61,19 @@ for b in range(8):
 	i.append(tmp)
 ```
 
-以上から、
+以上から、0≦j≦39として、
 i[j] = m[(j%3)*8 + j//3] ^ k[j//3] ^ k[j%3]
+となる。
 
-各配列毎にprintで表示するとわかりやすい。
+添字が複雑だが、各配列毎にprintで表示すると関係がわかりやすい。
 
-最後に表示している配列を s とすると、
-
+また、最後に表示している配列を s とすると
 s[j] = m[(j%3)*8 + j//3] ^ k[j//3] ^ k[j%3] + k[0]
+となる。
 
 ここでs[0]を考えると、
 s[0] = m[0] ^ k[0] ^ k[0] + k[0]
-XORの性質から簡略化できて、
+XORの性質から変形できて、
 k[0] = s[0] - m[0]
 k[0] = 109
 

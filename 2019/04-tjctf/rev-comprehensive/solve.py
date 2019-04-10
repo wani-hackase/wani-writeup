@@ -4,9 +4,7 @@ sm = 2613
 key = 'munchkyn'
 
 subk0 = [x-ord(key[0]) for x in output]
-print(subk0)
 a = [x^ord(key[i%3])^ord(key[i//3]) for i, x in enumerate(subk0)]
-print(a)
 
 
 flag = ''
@@ -14,5 +12,4 @@ for i in range(3):
     for j in range(0, 24, 3):
         flag += chr(a[i+j])
 
-print(sum(a))
 print(flag)
