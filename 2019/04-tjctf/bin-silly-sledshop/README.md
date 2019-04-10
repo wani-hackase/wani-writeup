@@ -337,8 +337,8 @@ Which product would you like?
 $
 ```
 
-とりあえずローカルでシェルを取れるようにsolve002.pyを書いてみた。
-ローカルだと起動成功！
+とりあえずsocatで立てたローカルサーバでシェルを取れるようにsolve002.pyを書いてみた。
+ローカルだとシェルの起動成功！
 
 ```python:solve002.py
 import socket
@@ -532,6 +532,7 @@ tjctf{5l3dd1n6_0mk4r_15_h4ppy_0mk4r}
 
 
 ## 参考
-- [[ブルートフォースによる32bit ASLR回避 - ももいろテクノロジー:http://inaz2.hatenablog.com/entry/2014/03/15/073837]]
+
+- [ブルートフォースによる32bit ASLR回避 - ももいろテクノロジー](http://inaz2.hatenablog.com/entry/2014/03/15/073837)
 
 	
