@@ -317,7 +317,7 @@ Which product would you like?
 $
 ```
 
-socatでサーバ化して繋ぐと同じ`0xffffd3fc`となる。
+socatでサーバ化して繋ぐと`0xffffd3fc`となる。
 シェルコードの位置はここから+20なのでシェルコードの位置は`0xffffd410`となる。
 
 ```bash-statement
