@@ -12,7 +12,8 @@ ncすると次のように言われる。
 Find the minimum distance between the centers of two circles to continue:
 
 この文章に続いてBase64らしきデータが与えられる。decode するとこのような画像ファイルであることが分かる。上の文章の指す circles はこの画像のものであることが分かる。
-![](polkadot0)
+
+![polkadot](polkadot0)
 
 どの画像にも円が25個あり、中心同士の距離を 25*24/2 = 300 通り求め、その最小値を返せば良い。
 円の中心の検出には[opencv-python](https://github.com/skvark/opencv-python)を用いた。cv2.HoughCirclesの引数に「検出する円と円の最小距離」を指定する箇所があったので、これを利用して中心間の最小距離を求めた。
