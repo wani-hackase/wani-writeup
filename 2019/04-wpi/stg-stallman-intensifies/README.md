@@ -1,4 +1,4 @@
-# WPICTF 2019 `*Stallman intensifies* [stg 100]` writeup
+# WPICTF 2019 `*stallman intensifies* [stg 100]` writeup
 
 ## 問題
 ![Challenge](Challenge.PNG)
