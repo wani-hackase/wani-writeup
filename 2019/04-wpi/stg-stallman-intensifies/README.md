@@ -34,7 +34,7 @@
 それらのWriteupによると，[Qsstv](https://charlesreid1.com/wiki/Qsstv)というツールを使えばsstv signalの画像化ができるらしいので，
 [Audacity](https://www.audacityteam.org/)で左側の音声を分離してからQsstvを通してみる．
 
-ｶﾞﾋﾟｶﾞﾋﾟｶﾞﾋﾟｰと画像が生成されていく様子は音も相まって個人的になかなか怖かったが，ノイズが一番ひどくなったタイミングでflag画像が無事出力された．
+ｶﾞﾋﾟｶﾞﾋﾟｶﾞﾋﾟｰと画像が生成されていく様子は音も相まって個人的になかなか怖かったが，音が一番激しくなったタイミングでflag画像が無事出力された．
 
 <details><summary>flag画像</summary><div>
 
