@@ -28,10 +28,10 @@
 
 (緑一色のフレームなどそれっぽいものもあってなかなか諦めきれなかった．かなり緑だった．)
 
-次の日，"**sstv signal**"なるものが使われていたというチャットを公式discordで見かける．
+その後，"**sstv signal**"なるものが使われているというチャットを公式discordで見かける．
 調べてみると，sstvという狭帯域での画像送信方法らしく，過去のCTF問題にもいくつかあったっぽい．
 
-それらのWriteupを眺めると，[Qsstv](https://charlesreid1.com/wiki/Qsstv)というツールを使えばsstv signalの画像化ができるらしいので，
+それらのWriteupによると，[Qsstv](https://charlesreid1.com/wiki/Qsstv)というツールを使えばsstv signalの画像化ができるらしいので，
 [Audacity](https://www.audacityteam.org/)で左側の音声を分離してからQsstvを通してみる．
 
 ｶﾞﾋﾟｶﾞﾋﾟｶﾞﾋﾟｰと画像が生成されていく様子は音も相まって個人的になかなか怖かったが，ノイズが一番ひどくなったタイミングでflag画像が無事出力された．
