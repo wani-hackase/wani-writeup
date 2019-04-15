@@ -1,0 +1,10 @@
+wpi wpictf
+wpi_ctf
+wpi-ctf
+admin
+flag
+steghide
+stallman
+stallman_intensefiles
+*stallman_intensefiles*
+GNU+WPICSC
