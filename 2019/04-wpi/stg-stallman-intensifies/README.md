@@ -4,7 +4,7 @@
 ![Challenge](Challenge.PNG)
 
 ## 解答
-リンク[1.](https://drive.google.com/file/d/1VrNgsfcD224vcUdpUAnUSyWvoL8nZ9zF/view?usp=sharing)[2.](https://www.dropbox.com/s/xhab7zms5n35867/stallman-intensifies.zip?dl=0)からダウンロードできるzipファイルを解凍すると，中身は5枚のJPEG画像とpass付の7zファイル．
+リンク[[1.]](https://drive.google.com/file/d/1VrNgsfcD224vcUdpUAnUSyWvoL8nZ9zF/view?usp=sharing)[[2.]](https://www.dropbox.com/s/xhab7zms5n35867/stallman-intensifies.zip?dl=0)からダウンロードできるzipファイルを解凍すると，中身は5枚のJPEG画像とpass付の7zファイル．
 
 7zファイルが解凍できればflag GETだろうと予想して，5枚のJPEG画像を調べる．
 
