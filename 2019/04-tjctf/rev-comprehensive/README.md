@@ -1,4 +1,4 @@
-# VolgaCTF 2019 Qualifier "Blind" writeup
+# TJCTF 2019 "Comprehensive" writeup
 
 ## Description
 

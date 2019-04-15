@@ -1,0 +1,137 @@
+$ radare22 parrot 
+ -- Too bad there is no gif support in r2. Yet. -- @r2gif
+[0x080483d0]> aaa
+[x] Analyze all flags starting with sym. and entry0 (aa)
+[x] Analyze function calls (aac)
+[x] Analyze len bytes of instructions for references (aar)
+[x] Type matching analysis for all functions (aaft)
+[x] Use -AA or aaaa to perform additional experimental analysis.
+[0x080483d0]> s main
+[0x080484cb]> pdf
+/ (fcn) main 358
+|   int main (int argc, char **argv, char **envp);
+|           ; var int var_5ch @ ebp-0x5c
+|           ; var uint32_t var_50h @ ebp-0x50
+|           ; var signed int var_4ch @ ebp-0x4c
+|           ; var signed int var_48h @ ebp-0x48
+|           ; var signed int var_44h @ ebp-0x44
+|           ; var char *s @ ebp-0x3f
+|           ; var int var_36h @ ebp-0x36
+|           ; var int var_ch @ ebp-0xc
+|           ; arg int arg_4h @ esp+0x4
+|           ; DATA XREF from entry0 (0x80483e7)
+|           0x080484cb      8d4c2404       lea ecx, [arg_4h]           ; 4
+|           0x080484cf      83e4f0         and esp, 0xfffffff0
+|           0x080484d2      ff71fc         push dword [ecx - 4]
+|           0x080484d5      55             push ebp
+|           0x080484d6      89e5           mov ebp, esp
+|           0x080484d8      51             push ecx
+|           0x080484d9      83ec64         sub esp, 0x64               ; 'd'
+|           0x080484dc      89c8           mov eax, ecx
+|           0x080484de      8b4004         mov eax, dword [eax + 4]    ; [0x4:4]=-1 ; 4
+|           0x080484e1      8945a4         mov dword [var_5ch], eax
+|           0x080484e4      65a114000000   mov eax, dword gs:[0x14]    ; [0x14:4]=-1 ; 20
+|           0x080484ea      8945f4         mov dword [var_ch], eax
+|           0x080484ed      31c0           xor eax, eax
+|           ; CODE XREFS from main (0x80485fa, 0x8048613, 0x804862c)
+|     ...-> 0x080484ef      83ec0c         sub esp, 0xc
+|     :::   0x080484f2      68c0860408     push str.Say_something_to_the_parrot: ; 0x80486c0 ; "Say something to the parrot: " ; const char *format
+|     :::   0x080484f7      e874feffff     call sym.imp.printf         ; int printf(const char *format)
+|     :::   0x080484fc      83c410         add esp, 0x10
+|     :::   0x080484ff      a180a00408     mov eax, dword [obj.stdin]  ; obj.stdin__GLIBC_2.0 ; [0x804a080:4]=0
+|     :::   0x08048504      83ec04         sub esp, 4
+|     :::   0x08048507      50             push eax                    ; FILE *stream
+|     :::   0x08048508      6a33           push 0x33                   ; '3' ; 51 ; int size
+|     :::   0x0804850a      8d45c1         lea eax, [s]
+|     :::   0x0804850d      50             push eax                    ; char *s
+|     :::   0x0804850e      e86dfeffff     call sym.imp.fgets          ; char *fgets(char *s, int size, FILE *stream)
+|     :::   0x08048513      83c410         add esp, 0x10
+|     :::   0x08048516      83ec0c         sub esp, 0xc
+|     :::   0x08048519      8d45c1         lea eax, [s]
+|     :::   0x0804851c      50             push eax                    ; const char *s
+|     :::   0x0804851d      e87efeffff     call sym.imp.strlen         ; size_t strlen(const char *s)
+|     :::   0x08048522      83c410         add esp, 0x10
+|     :::   0x08048525      83f822         cmp eax, 0x22               ; '"' ; 34
+|    ,====< 0x08048528      0f85ea000000   jne 0x8048618
+|    |:::   0x0804852e      c745b0010000.  mov dword [var_50h], 1
+|    |:::   0x08048535      c745b4000000.  mov dword [var_4ch], 0
+|    |:::   ; CODE XREF from main (0x8048567)
+|   .-----> 0x0804853c      837db405       cmp dword [var_4ch], 5
+|  ,======< 0x08048540      7f27           jg 0x8048569
+|  |:|:::   0x08048542      8d55c1         lea edx, [s]
+|  |:|:::   0x08048545      8b45b4         mov eax, dword [var_4ch]
+|  |:|:::   0x08048548      01d0           add eax, edx
+|  |:|:::   0x0804854a      0fb610         movzx edx, byte [eax]
+|  |:|:::   0x0804854d      8b45b4         mov eax, dword [var_4ch]
+|  |:|:::   0x08048550      0540a00408     add eax, str.tjctf_my_b3l0v3d_5qu4wk3r_w0n7_y0u_l34v3_m3_4l0n3 ; 0x804a040 ; "tjctf{my_b3l0v3d_5qu4wk3r_w0n7_y0u_l34v3_m3_4l0n3}"
+|  |:|:::   0x08048555      0fb600         movzx eax, byte [eax]
+|  |:|:::   0x08048558      38c2           cmp dl, al
+| ,=======< 0x0804855a      7407           je 0x8048563
+| ||:|:::   0x0804855c      c745b0000000.  mov dword [var_50h], 0
+| ||:|:::   ; CODE XREF from main (0x804855a)
+| `-------> 0x08048563      8345b401       add dword [var_4ch], 1
+|  |`=====< 0x08048567      ebd3           jmp 0x804853c
+|  | |:::   ; CODE XREF from main (0x8048540)
+|  `------> 0x08048569      c745b8000000.  mov dword [var_48h], 0
+|    |:::   ; CODE XREF from main (0x804859d)
+|   .-----> 0x08048570      837db802       cmp dword [var_48h], 2
+|  ,======< 0x08048574      7f29           jg 0x804859f
+|  |:|:::   0x08048576      8b45b8         mov eax, dword [var_48h]
+|  |:|:::   0x08048579      83c006         add eax, 6
+|  |:|:::   0x0804857c      0fb65405c1     movzx edx, byte [ebp + eax - 0x3f]
+|  |:|:::   0x08048581      8b45b8         mov eax, dword [var_48h]
+|  |:|:::   0x08048584      83c00e         add eax, 0xe
+|  |:|:::   0x08048587      0fb68040a004.  movzx eax, byte [eax + str.tjctf_my_b3l0v3d_5qu4wk3r_w0n7_y0u_l34v3_m3_4l0n3] ; obj.v1 ; [0x804a040:1]=116 ; "tjctf{my_b3l0v3d_5qu4wk3r_w0n7_y0u_l34v3_m3_4l0n3}"
+|  |:|:::   0x0804858e      38c2           cmp dl, al
+| ,=======< 0x08048590      7407           je 0x8048599
+| ||:|:::   0x08048592      c745b0000000.  mov dword [var_50h], 0
+| ||:|:::   ; CODE XREF from main (0x8048590)
+| `-------> 0x08048599      8345b801       add dword [var_48h], 1
+|  |`=====< 0x0804859d      ebd1           jmp 0x8048570
+|  | |:::   ; CODE XREF from main (0x8048574)
+|  `------> 0x0804859f      c745bc000000.  mov dword [var_44h], 0
+|    |:::   ; CODE XREF from main (0x80485d3)
+|   .-----> 0x080485a6      837dbc16       cmp dword [var_44h], 0x16
+|  ,======< 0x080485aa      7f29           jg 0x80485d5
+|  |:|:::   0x080485ac      8b45bc         mov eax, dword [var_44h]
+|  |:|:::   0x080485af      83c00a         add eax, 0xa
+|  |:|:::   0x080485b2      0fb65405c1     movzx edx, byte [ebp + eax - 0x3f]
+|  |:|:::   0x080485b7      8b45bc         mov eax, dword [var_44h]
+|  |:|:::   0x080485ba      83c01b         add eax, 0x1b
+|  |:|:::   0x080485bd      0fb68040a004.  movzx eax, byte [eax + str.tjctf_my_b3l0v3d_5qu4wk3r_w0n7_y0u_l34v3_m3_4l0n3] ; obj.v1 ; [0x804a040:1]=116 ; "tjctf{my_b3l0v3d_5qu4wk3r_w0n7_y0u_l34v3_m3_4l0n3}"
+|  |:|:::   0x080485c4      38c2           cmp dl, al
+| ,=======< 0x080485c6      7407           je 0x80485cf
+| ||:|:::   0x080485c8      c745b0000000.  mov dword [var_50h], 0
+| ||:|:::   ; CODE XREF from main (0x80485c6)
+| `-------> 0x080485cf      8345bc01       add dword [var_44h], 1
+|  |`=====< 0x080485d3      ebd1           jmp 0x80485a6
+|  | |:::   ; CODE XREF from main (0x80485aa)
+|  `------> 0x080485d5      0fb645ca       movzx eax, byte [var_36h]
+|    |:::   0x080485d9      3c64           cmp al, 0x64                ; 'd' ; 100
+|   ,=====< 0x080485db      7407           je 0x80485e4
+|   ||:::   0x080485dd      c745b0000000.  mov dword [var_50h], 0
+|   ||:::   ; CODE XREF from main (0x80485db)
+|   `-----> 0x080485e4      837db000       cmp dword [var_50h], 0
+|   ,=====< 0x080485e8      7415           je 0x80485ff
+|   ||:::   0x080485ea      83ec0c         sub esp, 0xc
+|   ||:::   0x080485ed      68de860408     push str.You_got_my_flag    ; 0x80486de ; "You got my flag!" ; const char *s
+|   ||:::   0x080485f2      e899fdffff     call sym.imp.puts           ; int puts(const char *s)
+|   ||:::   0x080485f7      83c410         add esp, 0x10
+|   ||`===< 0x080485fa      e9f0feffff     jmp 0x80484ef
+|   || ::   ; CODE XREF from main (0x80485e8)
+|   `-----> 0x080485ff      83ec08         sub esp, 8
+|    | ::   0x08048602      8d45c1         lea eax, [s]
+|    | ::   0x08048605      50             push eax
+|    | ::   0x08048606      68ef860408     push str.a__s               ; 0x80486ef ; "a %s" ; const char *format
+|    | ::   0x0804860b      e860fdffff     call sym.imp.printf         ; int printf(const char *format)
+|    | ::   0x08048610      83c410         add esp, 0x10
+|    | `==< 0x08048613      e9d7feffff     jmp 0x80484ef
+|    |  :   ; CODE XREF from main (0x8048528)
+|    `----> 0x08048618      83ec08         sub esp, 8
+|       :   0x0804861b      8d45c1         lea eax, [s]
+|       :   0x0804861e      50             push eax
+|       :   0x0804861f      68f4860408     push 0x80486f4              ; const char *format
+|       :   0x08048624      e847fdffff     call sym.imp.printf         ; int printf(const char *format)
+|       :   0x08048629      83c410         add esp, 0x10
+\       `=< 0x0804862c      e9befeffff     jmp 0x80484ef
+

@@ -1,0 +1,309 @@
+[+] Opening connection to p1.tjctf.org on port 8005: Done
+[+] 0
+('[+]', u'To get the flag, solve a hundred captchas in 500 seconds!\n')
+41.4
+[+] 1
+('[+]', u'>>> Correct! You have 497.9 seconds left.\n')
+41.1
+[+] 2
+('[+]', u'>>> Correct! You have 495.8 seconds left.\n')
+43.3
+[+] 3
+('[+]', u'>>> Correct! You have 493.7 seconds left.\n')
+47.6
+[+] 4
+('[+]', u'>>> Correct! You have 491.9 seconds left.\n')
+40.7
+[+] 5
+('[+]', u'>>> Correct! You have 489.7 seconds left.\n')
+45.0
+[+] 6
+('[+]', u'>>> Correct! You have 487.6 seconds left.\n')
+37.5
+[+] 7
+('[+]', u'>>> Correct! You have 485.5 seconds left.\n')
+41.1
+[+] 8
+('[+]', u'>>> Correct! You have 483.7 seconds left.\n')
+43.6
+[+] 9
+('[+]', u'>>> Correct! You have 481.6 seconds left.\n')
+44.6
+[+] 10
+('[+]', u'>>> Correct! You have 479.7 seconds left.\n')
+44.4
+[+] 11
+('[+]', u'>>> Correct! You have 478.0 seconds left.\n')
+39.0
+[+] 12
+('[+]', u'>>> Correct! You have 476.0 seconds left.\n')
+41.6
+[+] 13
+('[+]', u'>>> Correct! You have 473.8 seconds left.\n')
+44.9
+[+] 14
+('[+]', u'>>> Correct! You have 472.0 seconds left.\n')
+42.1
+[+] 15
+('[+]', u'>>> Correct! You have 470.3 seconds left.\n')
+40.0
+[+] 16
+('[+]', u'>>> Correct! You have 468.4 seconds left.\n')
+44.1
+[+] 17
+('[+]', u'>>> Correct! You have 466.5 seconds left.\n')
+41.7
+[+] 18
+('[+]', u'>>> Correct! You have 464.5 seconds left.\n')
+45.2
+[+] 19
+('[+]', u'>>> Correct! You have 462.5 seconds left.\n')
+43.9
+[+] 20
+('[+]', u'>>> Correct! You have 460.6 seconds left.\n')
+37.6
+[+] 21
+('[+]', u'>>> Correct! You have 458.5 seconds left.\n')
+46.4
+[+] 22
+('[+]', u'>>> Correct! You have 456.8 seconds left.\n')
+43.5
+[+] 23
+('[+]', u'>>> Correct! You have 454.5 seconds left.\n')
+47.5
+[+] 24
+('[+]', u'>>> Correct! You have 452.4 seconds left.\n')
+46.5
+[+] 25
+('[+]', u'>>> Correct! You have 450.2 seconds left.\n')
+43.6
+[+] 26
+('[+]', u'>>> Correct! You have 448.2 seconds left.\n')
+43.6
+[+] 27
+('[+]', u'>>> Correct! You have 445.9 seconds left.\n')
+43.5
+[+] 28
+('[+]', u'>>> Correct! You have 443.8 seconds left.\n')
+45.5
+[+] 29
+('[+]', u'>>> Correct! You have 441.9 seconds left.\n')
+48.0
+[+] 30
+('[+]', u'>>> Correct! You have 440.2 seconds left.\n')
+43.1
+[+] 31
+('[+]', u'>>> Correct! You have 438.4 seconds left.\n')
+48.4
+[+] 32
+('[+]', u'>>> Correct! You have 436.6 seconds left.\n')
+47.2
+[+] 33
+('[+]', u'>>> Correct! You have 434.7 seconds left.\n')
+45.2
+[+] 34
+('[+]', u'>>> Correct! You have 432.6 seconds left.\n')
+47.0
+[+] 35
+('[+]', u'>>> Correct! You have 430.9 seconds left.\n')
+46.1
+[+] 36
+('[+]', u'>>> Correct! You have 429.1 seconds left.\n')
+39.6
+[+] 37
+('[+]', u'>>> Correct! You have 427.1 seconds left.\n')
+42.7
+[+] 38
+('[+]', u'>>> Correct! You have 425.2 seconds left.\n')
+44.6
+[+] 39
+('[+]', u'>>> Correct! You have 423.1 seconds left.\n')
+45.5
+[+] 40
+('[+]', u'>>> Correct! You have 421.0 seconds left.\n')
+44.9
+[+] 41
+('[+]', u'>>> Correct! You have 418.8 seconds left.\n')
+53.2
+[+] 42
+('[+]', u'>>> Correct! You have 417.0 seconds left.\n')
+44.7
+[+] 43
+('[+]', u'>>> Correct! You have 414.9 seconds left.\n')
+50.6
+[+] 44
+('[+]', u'>>> Correct! You have 412.8 seconds left.\n')
+45.0
+[+] 45
+('[+]', u'>>> Correct! You have 410.7 seconds left.\n')
+38.2
+[+] 46
+('[+]', u'>>> Correct! You have 408.9 seconds left.\n')
+38.8
+[+] 47
+('[+]', u'>>> Correct! You have 406.7 seconds left.\n')
+40.2
+[+] 48
+('[+]', u'>>> Correct! You have 404.5 seconds left.\n')
+40.8
+[+] 49
+('[+]', u'>>> Correct! You have 402.5 seconds left.\n')
+40.8
+[+] 50
+('[+]', u'>>> Correct! You have 400.6 seconds left.\n')
+47.3
+[+] 51
+('[+]', u'>>> Correct! You have 398.8 seconds left.\n')
+49.1
+[+] 52
+('[+]', u'>>> Correct! You have 397.1 seconds left.\n')
+41.7
+[+] 53
+('[+]', u'>>> Correct! You have 395.0 seconds left.\n')
+47.2
+[+] 54
+('[+]', u'>>> Correct! You have 393.0 seconds left.\n')
+48.7
+[+] 55
+('[+]', u'>>> Correct! You have 390.9 seconds left.\n')
+51.4
+[+] 56
+('[+]', u'>>> Correct! You have 388.8 seconds left.\n')
+43.1
+[+] 57
+('[+]', u'>>> Correct! You have 386.9 seconds left.\n')
+43.9
+[+] 58
+('[+]', u'>>> Correct! You have 384.8 seconds left.\n')
+43.3
+[+] 59
+('[+]', u'>>> Correct! You have 382.9 seconds left.\n')
+43.0
+[+] 60
+('[+]', u'>>> Correct! You have 380.9 seconds left.\n')
+48.0
+[+] 61
+('[+]', u'>>> Correct! You have 379.1 seconds left.\n')
+41.1
+[+] 62
+('[+]', u'>>> Correct! You have 377.1 seconds left.\n')
+42.9
+[+] 63
+('[+]', u'>>> Correct! You have 375.3 seconds left.\n')
+49.2
+[+] 64
+('[+]', u'>>> Correct! You have 373.4 seconds left.\n')
+51.2
+[+] 65
+('[+]', u'>>> Correct! You have 371.6 seconds left.\n')
+49.6
+[+] 66
+('[+]', u'>>> Correct! You have 369.8 seconds left.\n')
+42.4
+[+] 67
+('[+]', u'>>> Correct! You have 367.9 seconds left.\n')
+40.3
+[+] 68
+('[+]', u'>>> Correct! You have 365.7 seconds left.\n')
+48.2
+[+] 69
+('[+]', u'>>> Correct! You have 363.8 seconds left.\n')
+44.1
+[+] 70
+('[+]', u'>>> Correct! You have 362.1 seconds left.\n')
+45.0
+[+] 71
+('[+]', u'>>> Correct! You have 360.3 seconds left.\n')
+44.2
+[+] 72
+('[+]', u'>>> Correct! You have 358.4 seconds left.\n')
+48.1
+[+] 73
+('[+]', u'>>> Correct! You have 356.5 seconds left.\n')
+43.9
+[+] 74
+('[+]', u'>>> Correct! You have 354.3 seconds left.\n')
+43.0
+[+] 75
+('[+]', u'>>> Correct! You have 352.4 seconds left.\n')
+48.7
+[+] 76
+('[+]', u'>>> Correct! You have 350.6 seconds left.\n')
+45.2
+[+] 77
+('[+]', u'>>> Correct! You have 348.9 seconds left.\n')
+43.4
+[+] 78
+('[+]', u'>>> Correct! You have 347.0 seconds left.\n')
+45.5
+[+] 79
+('[+]', u'>>> Correct! You have 345.0 seconds left.\n')
+37.6
+[+] 80
+('[+]', u'>>> Correct! You have 342.9 seconds left.\n')
+43.3
+[+] 81
+('[+]', u'>>> Correct! You have 340.9 seconds left.\n')
+41.0
+[+] 82
+('[+]', u'>>> Correct! You have 338.9 seconds left.\n')
+49.4
+[+] 83
+('[+]', u'>>> Correct! You have 336.8 seconds left.\n')
+50.3
+[+] 84
+('[+]', u'>>> Correct! You have 334.9 seconds left.\n')
+43.1
+[+] 85
+('[+]', u'>>> Correct! You have 332.8 seconds left.\n')
+43.1
+[+] 86
+('[+]', u'>>> Correct! You have 330.9 seconds left.\n')
+40.0
+[+] 87
+('[+]', u'>>> Correct! You have 329.2 seconds left.\n')
+42.2
+[+] 88
+('[+]', u'>>> Correct! You have 327.4 seconds left.\n')
+42.1
+[+] 89
+('[+]', u'>>> Correct! You have 325.6 seconds left.\n')
+46.6
+[+] 90
+('[+]', u'>>> Correct! You have 323.8 seconds left.\n')
+45.6
+[+] 91
+('[+]', u'>>> Correct! You have 322.1 seconds left.\n')
+45.8
+[+] 92
+('[+]', u'>>> Correct! You have 320.4 seconds left.\n')
+39.2
+[+] 93
+('[+]', u'>>> Correct! You have 318.7 seconds left.\n')
+40.8
+[+] 94
+('[+]', u'>>> Correct! You have 316.9 seconds left.\n')
+45.3
+[+] 95
+('[+]', u'>>> Correct! You have 314.7 seconds left.\n')
+45.5
+[+] 96
+('[+]', u'>>> Correct! You have 312.7 seconds left.\n')
+52.6
+[+] 97
+('[+]', u'>>> Correct! You have 310.8 seconds left.\n')
+45.3
+[+] 98
+('[+]', u'>>> Correct! You have 308.9 seconds left.\n')
+45.2
+[+] 99
+('[+]', u'>>> Correct! You have 306.8 seconds left.\n')
+47.0
+[*] Switching to interactive mode
+>>> Correct! You have 304.7 seconds left.
+
+Nice! Your flag is:  tjctf{i5_th1s_c0mput3r_v1si0n?}
+[*] Got EOF while reading in interactive
+$ 
+[*] Interrupted
+[*] Closed connection to p1.tjctf.org port 8005
