@@ -65,6 +65,8 @@ Say something to the parrot:
 １文字ずつあらわれた。`cmp al, dl`によって文字列の先頭から一文字づつ比較され、すべて一致していた場合に`You got my flag!`が出力されるようになっていたので、
 eaxに現れる文字を見ていけばそれがFLAGのはず。
 
+![parrot.png](https://github.com/wani-hackase/wani-writeup/blob/master/2019/04-tjctf/rev-broken-parrot/parrot.png)
+
 と、思いきや少しだけ違った。
 
 入力した文字列が先頭から順番に比較されているものかと思っていたが、実は`{}の中の４個目の文字だけ比較されていなかった`。
