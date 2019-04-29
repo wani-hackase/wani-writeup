@@ -52,7 +52,6 @@ skillリストを見に行くと，先ほどの"pwn"に加えて"misc"という�
 
 結果としては，flagは"213697"をMD5で暗号化して大文字のフォーマットいれたものになる．
 
-
 <details><summary>flag</summary><div>
 *CTF{d6f3fdffbcb462607878af65d059f274}
 </div></details>
