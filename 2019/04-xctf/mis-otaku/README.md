@@ -190,6 +190,26 @@ WinRARの試用期間が終わっても同じことができるのかどうか�
 
 何かわかれば追記します．何かわかっていれば教えてください．
 
+## 追記
+普通にzstegで出た......
+
+ステガノの問題やり始めてから今までに使ったことがなかったから完全に忘れてた．
+
+```
+$ zsteg flag.png
+/usr/lib/ruby/2.5.0/open3.rb:199: warning: Insecure world writable dir /home/ishioka/.local/bin in PATH, mode 040777
+imagedata           .. file: VAX-order 68k Blit mpx/mux executable
+b1,rgb,lsb,xy       .. text: "*ctf{vI0l3t_Ev3rg@RdeN}\n"
+b2,r,msb,xy         .. text: "UUUUUUV)\\"
+b4,r,lsb,xy         .. text: "gwdUB33\""
+b4,r,msb,xy         .. text: "UUUUUUUUUUUUYU"
+b4,g,lsb,xy         .. text: "23TETfTER\"1"
+b4,b,lsb,xy         .. text: "gTT#%Ugi"
+b4,b,msb,xy         .. text: "DDDD\"\"\"\"\"\"\"\",\""
+```
+
+手元の環境だとstepicがエラーで使えないのでzstegを使うことにする．
+
 ## tool
 + [pkcrack](http://kaworu.jpn.org/kaworu/2012-12-07-1.php#2012-12-07-1-14b7d76f2abce310837a677aad65c1ad)
 + [WinRAR](https://www.winrarjapan.com/download)
