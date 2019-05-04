@@ -214,3 +214,4 @@ b4,b,msb,xy         .. text: "DDDD\"\"\"\"\"\"\"\",\""
 + [pkcrack](http://kaworu.jpn.org/kaworu/2012-12-07-1.php#2012-12-07-1-14b7d76f2abce310837a677aad65c1ad)
 + [WinRAR](https://www.winrarjapan.com/download)
 + [Steganography Online](https://stylesuxx.github.io/steganography/)
++ [zsteg](https://github.com/zed-0xff/zsteg)
