@@ -22,6 +22,10 @@ $ objdump -d -M intel reiwa
 
 その結果がある値と一致しているかどうかをチェックしていた。
 
+入力に"AAAAAAAAA"と入れたときの例
+![gdb1.png](gdb1.png)
+![gdb2.png](gdb2.png)
+
 下の表を満たす文字を入力すればOK
 
 |INPUT  |"SHOWA"  |INPUT xor SHOWA  |
