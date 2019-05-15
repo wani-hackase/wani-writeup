@@ -70,17 +70,17 @@ saru@lucifen:~/wani-writeup/2019/05-defcon/pwn-speedrun-001$
 ということでROPだなーと。
 64bitのROPは組んだことあったようなないような。
 
-あった。
-[PWNオーバーフロー入門: 64bit環境でのアドレスリークを利用してシェルを起動 (SSP、PIE無効で64bit ELF) Classic Pwn 2回目 ](https://github.com/saru2017/pwn010)
+あった。 
+[PWNオーバーフロー入門: 64bit環境でのアドレスリークを利用してシェルを起動 (SSP、PIE無効で64bit ELF) Classic Pwn 2回目 ](https://github.com/saru2017/pwn010) 
 が少し違うか。
 
 戦略はROPでexecveシステムコールを直接呼んで`/bin/sh`を起動すること。
 
 まず、64bitでシステムコールを呼ぶのは`syscall`命令を呼ぶ。
-システムコール番号はrax、引数はrdi,rsi,rdx,r10の順番に呼ぶ。~
+システムコール番号はrax、引数はrdi,rsi,rdx,r10の順番に呼ぶ。 
 [Reversingとかpwnとかを解くときのメモ(かきかけ) - 忖度](http://satos.hatenablog.jp/entry/2016/12/02/192417)
 
-execveのシステムコール番号は59。~
+execveのシステムコール番号は59。 
 [Syscall Number for x86-64 linux (A)](https://www.mztn.org/lxasm64/x86_x64_table.html)
 
 `execve`を呼ぶときにはexecve("/bin/sh", argv, NULL)で呼び、argvは["/bin/sh", NULL]となる．
@@ -88,10 +88,11 @@ execveのシステムコール番号は59。~
 - rdi → "/bin/sh"のアドレス
 - rsi → argvのアドレス
 - rdx → NULL
-を入れ、
 
+を入れ、
 - "/bin/sh"のアドレス → NULLで終わる文字列/bin/sh
 - argvのアドレス → "/bin/sh"のアドレス, NULLの順に8バイトずつ
+
 を入れれば良い。
 
 ところが今回はlibcを使っていないこともあり、"/bin/sh"が無い。
