@@ -34,3 +34,6 @@ print(flag.to_bytes((flag.bit_length()+7)//8, byteorder='big'))
 ```
 
 Flag: `KosenCTF{H0R1_Yukk0_1s_th3_ESP3r_QUEEN}`
+
+
+参考:  <a href="https://gsdt.github.io/blog/2018/07/20/stereotyped-message-attack/">RSA Attack: Stereotyped message attack</a>
