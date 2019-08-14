@@ -8,7 +8,7 @@ Please check if I can get the flag here.
 
 ### 解法
 
-Cookieに `{"is_hit": false, "number": 765876346283}` をAES-CBCで暗号化した結果が格納されています。ブロックは16バイトずつ区切られていて、1ブロック目は`{"is_hit": false`という感じです。この1ブロック目が復号される際にIVとのXORを取るので、Cookieに直接書いてあるIVを書き換えれば最後の'false'が'true 'へと書き換わります。
+Cookieに `{"is_hit": false, "number": 765876346283}` をIVとAES-CBCで暗号化した結果が格納されています。暗号文は16バイトずつのブロック区切られていて、1ブロック目は`{"is_hit": false`とIVのXORを取った値を暗号化した値となっています。復号される際に再びIVとのXORが取られるので、Cookieに直接書いてあるIVを書き換えておけば、最後の'false'が'true 'へと書き換わります。
 
 ```python
 from Crypto.Cipher import AES
