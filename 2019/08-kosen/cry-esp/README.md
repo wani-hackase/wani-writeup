@@ -8,13 +8,13 @@ ESP stands for Erai-Sugoi-Power.
 
 
 ### 解法
-平文 m の一部以外が分かっている状態でその暗号文 c と e, N が与えられています。Stereotyped message attackができそう。
-まず平文のうち未知の部分を`\x00`に文字数を維持したまま置換する。つまり
+平文 m の一部以外が分かっている状態でその暗号文 c と e, N が与えられています。Stereotyped message attackができそうな感じです。
+まず平文のうち未知の部分を`\x00`に文字数を維持したまま置換します。つまり
 ```
 Yukko the ESPer: My amazing ESP can help you to get the flag! -----> KosenCTF{\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00}
 ```
 とします。
-これを数値に変換したものを m として、 `(m+x)^e - c ≡ 0 mod n` となる x を見つければ、x は未知だった平文と一致するはずです。
+次にこれを数値に変換したものを m として、 `(m+x)^e - c ≡ 0 mod n` となる x を見つければ、x は未知だった平文と一致するはずです。
 
 
 ```Python
