@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Image Extractor</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Image Extractor</h1>
+      <p>Extract images from Microsoft Office Word files (.docx)
+    </header>
+
+    <% if defined?@err %>
+    <div>
+      <p><%= @err %></p>
+    </div>
+    <% end %>
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <p>
+        CHOOSE FILE: <input name="file" type="file" />
+      </p>
+      <p>
+        <input type="submit" value="UPLOAD"/>
+      </p>
+    </form>
+  </div>
+</body>
+</html>
