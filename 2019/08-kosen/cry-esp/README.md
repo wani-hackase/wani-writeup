@@ -8,8 +8,8 @@ ESP stands for Erai-Sugoi-Power.
 
 
 ### 解法
-平文 $m$ の一部以外が分かっている状態でその暗号文 $c$ と$e, N$ が与えられています。Stereotyped message attackができそう。
-まず平文のうち未知の部分を\x00に文字数を維持したまま置換する。つまり
+平文 m の一部以外が分かっている状態でその暗号文 c と e, N が与えられています。Stereotyped message attackができそう。
+まず平文のうち未知の部分を`\x00`に文字数を維持したまま置換する。つまり
 ```
 Yukko the ESPer: My amazing ESP can help you to get the flag! -----> KosenCTF{\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00}
 ```
