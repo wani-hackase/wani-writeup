@@ -83,3 +83,5 @@ FLAG: `Kosen{Bl00m_1n70_Y0u}`
 
 * GHIDRAでコンパイルしたときに定義では３個の引数しか取っていない`f()`が、呼び出しの際には引数が
 4個も入っていたのが謎だった。
+
+!(image)[https://github.com/wani-hackase/wani-writeup/blob/master/2019/08-kosen/rev-favorites/Screenshot%20from%202019-09-03%2002-10-12.png]
