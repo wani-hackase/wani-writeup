@@ -60,3 +60,10 @@ SEGV直前のスタックの状態は下のようなイメージ. この次の`p
 |syscall|
 |000000000| <- rsp
 |"/bin/sh"|
+
+push rax が実行される直前の状態。まだシェルコードは正しい状態で残っている。
+![before crushed](https://github.com/wani-hackase/wani-writeup/blob/master/2019/11-tuctf/shellme64/shellcode_before_crushed.png)
+
+
+push rax が実行された直後の状態。push rdi以降の命令が壊されている
+![crushed](https://github.com/wani-hackase/wani-writeup/blob/master/2019/11-tuctf/shellme64/shellcode_crushed.png)
