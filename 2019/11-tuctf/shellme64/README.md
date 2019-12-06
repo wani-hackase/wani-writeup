@@ -51,6 +51,8 @@ io.interactive()
 SEGV直前のスタックの状態は下のようなイメージ. この次の`push rax`が実行されると送り込んだシェルコードが
 書き換えられてしまう。
 
+
+
 |  stack |
 |--------|
 |push rax|<- rip
@@ -60,6 +62,9 @@ SEGV直前のスタックの状態は下のようなイメージ. この次の`p
 |syscall|
 |000000000| <- rsp
 |"/bin/sh"|
+
+* rspは000000000の位置を指している
+* ripはpush raxの位置を指している
 
 push rax が実行される直前の状態。まだシェルコードは正しい状態で残っている。
 ![before crushed](https://github.com/wani-hackase/wani-writeup/blob/master/2019/11-tuctf/shellme64/shellcode_before_crushed.png)
