@@ -20,13 +20,15 @@ Are you smart?
 
 まずcontractを作る。リンク先のDeployを押すだけでいいが、MetaMaskは事前に入れておく必要がある。
 
-次にpasswordとpinを特定する。pinはblock.numberつまりblock heightでありこれは簡単に取得できるのでOK。passwordはcontractを作成したときのトランザクションに書いてあるはずだが、どのような形式で与えられているのか分からなかったのでソースコードを使って分かりやすいパスワードでdeployして実験した。ここでは `0xdeadbeef01234567` とした。EtherscanのTransaction Details→State Changesから確認してみると、以下のような値になっていることが確認できる。
+次にpasswordとpinを特定する。pinはblock.numberつまりblock heightでありこれは簡単に取得できるのでOK。  
+passwordはcontractを作成したときのトランザクションに書いてあるはずだが、どのような形式で与えられているのか分からなかったのでソースコードを使って分かりやすいパスワードでdeployして実験した。ここでは `0xdeadbeef01234567` とした。EtherscanのTransaction Details→State Changesから確認してみると、以下のような値になっていることが確認できる。
 
 ![password_test](./img/01.png)
 
-leading zeroを除いた先頭8バイト分がパスワードであることが分かった。
-これを踏まえて最初に作ったcontractのパスワードを確認する。
+leading zeroを除いた先頭8バイト分がパスワードであることが分かった。  
 
+
+これを踏まえて最初に作ったcontractのパスワードを確認する。
 ここでは `0x93e4462a250e0b95` であることが分かる。
 ![password](./img/02.png)
 
@@ -75,7 +77,6 @@ contract Attack{
 ```
 
 これをRemix(スマートコントラクトのIDE)からDeployする。
-
 ![deploy\_exploit](./img/03.png)
 
 
