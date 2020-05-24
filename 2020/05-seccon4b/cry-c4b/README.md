@@ -3,7 +3,6 @@
 ## 問題
 Are you smart?
 
-[http://c4b.quals.beginners.seccon.jp/](http://c4b.quals.beginners.seccon.jp/)
 
 
 ## 解法
