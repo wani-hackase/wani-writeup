@@ -1,4 +1,4 @@
-# SECCON Beginners CTF 2020 `Elementary Stack [pwn]` writeup by saru and t-taka
+# SECCON Beginners CTF 2020 `Elementary Stack [pwn]` writeup by saru and k-taka
 
 時間内に解けなかったのとすぐにwriteupが出回らなかったので延長戦で解いた。
 
