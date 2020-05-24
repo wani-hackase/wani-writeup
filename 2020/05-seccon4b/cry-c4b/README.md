@@ -81,7 +81,7 @@ contract Attack{
 
 
 
-先程入手したパスワードを入力してsendする。
+先程入手したパスワード(`0x93e4462a250e0b95`)を入力してsendする。
 ![send](./img/04.png)
 
 
