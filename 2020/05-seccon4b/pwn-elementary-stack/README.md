@@ -436,6 +436,11 @@ CTF楽しい。
 PWNだけやっていたい．．．
 しかし時間内に解けなかったのがほんとに悔しい...
 
+### 追記
+
+ptr-yudaiさんのwriteupがエレガント... まだ分かってないところ("%25$p"がなぜ渡せる？？？)があるので時間があったら考えてみる。
+- [SECCON Beginners CTF 2020 作問者Writeup - CTFするぞ](https://ptr-yudai.hatenablog.com/entry/2020/05/24/174914#Pwn-Elementary-Stack)
+
 ## 環境
 
 ちょっと訳ありでCloud9上に環境を構築しなおした。
