@@ -41,7 +41,7 @@ gets関数のリターンアドレスを書き換えてROPに持ち込むこと�
 過去のwriteupや解説記事をチームで共有しながら理解を深めて地道に取り組んでいくことに。
 
 ### ret2dl resolve attackとは
-ret2dl resolve attackはELFの遅延リンクの仕組みを利用して、共有ライブラリ内の関数を呼び出す攻撃手法。
+ret2dl resolve attackはELFの遅延リンクの仕組みを利用して共有ライブラリ内の関数を呼び出す攻撃手法。
 遅延リンクとは、Partial RELROにおいて関数が最初に呼び出された時に外部アドレスをGOTにキャッシュする方式である。
 遅延リンクはPLTによって実現される。
 配布されたプログラムを例にPLTのはたらきを解説する。
@@ -81,14 +81,14 @@ dl_runtime_resolve関数は.dynstrセクションの先頭からst_nameだけオ
 
 ![kasu bof](ret2dl_resolve_attack.png)
 
-ret2dl resolve attackでは、下図のような挙動を狙う。
+ret2dl resolve attackでは、上図のような挙動を狙う。
 一見すると.dynstrの当該文字列を書き換えるだけだが、実際には.dynstrセクションに書き込み権限はない。
-そこで、dl_runtime_resolve関数の第2引数のオフセットをを調整して自作した偽のリンク機構を動作させることを狙ってみる。
+そこで、dl_runtime_resolve関数の第2引数のオフセットを調整して自作した偽のリンク機構を動作させることを狙ってみる。
 リンクを作成するために用意したテーブルのアドレスを知っておく必要があるが、固定アドレスへの書き込みが可能であればret2dl resolve attackが達成できる
 
 ### Exploit
 まず固定アドレスへの書き込みを実現するために.bssセクションを狙ったROP stagerを行う。
-.bssセクションにデータを書き込んでstack pivotした後、.pltセクションの先頭のアドレスにjmpする。
+.bssセクションにデータを書き込んでstack pivotした後は、.pltセクションの先頭のアドレスにjmpする。
 前述の通り第2引数のオフセットを調節してdl_runtime_resolve関数を呼べば、自作した動的リンクを経てsystem関数が呼び出せる。
 
 気を付けなくてはならないのは、dl_runtime_resolve関数が各種健全性テストを行っていること。
@@ -99,6 +99,7 @@ ret2dl resolve attackでは、下図のような挙動を狙う。
   + シンボルがグローバル関数であることを示す
 + .dynsymの構造体が.dynsymセクションの先頭アドレスから0x10バイトの整数倍進んだアドレスに配置されていること。
   + .dynsymを構成する構造体のサイズが0x10バイトであるため。
+
 を確認している。
 
 以上を踏まえてexploit codeを作成する。
