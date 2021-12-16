@@ -22,7 +22,7 @@ int main(void) {
 
 ## 解法
 最初に取り掛かったのはチームメイトのsaruさん。
-何はともあれｹﾞtsィ機構のチェックから
+何はともあれセキュリティ機構のチェックから
 ```
 [*] '/home/saru/autopwn/db/2021/12_seccon/kasu_bof/chall'
     Arch:     i386-32-little
